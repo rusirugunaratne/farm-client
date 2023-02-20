@@ -1,7 +1,8 @@
 .content-group {
   display: flex;
   flex-direction: column;
-  width: 300px;
+  width: 330px;
+  gap: 10px;
 }
 
 .card-content {

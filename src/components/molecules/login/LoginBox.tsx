@@ -33,7 +33,7 @@ export default function LoginBox() {
           </form>
         </CardContent>
       </CardActionArea>
-      <CardActions sx={{ marginLeft: 2, marginTop: -2, marginBottom: 2 }}>
+      <CardActions sx={{ marginLeft: 2, marginTop: 2, marginBottom: 2 }}>
         <Button size="small" color="primary" variant="contained">
           Login
         </Button>
