@@ -1,0 +1,10 @@
+.content-group {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+}
+
+.card-content {
+  width: 95%;
+  margin: 5px;
+}
