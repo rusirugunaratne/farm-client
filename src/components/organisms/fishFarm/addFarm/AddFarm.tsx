@@ -12,6 +12,7 @@ import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import useForm from "../../../../hooks/useForms";
 import { useNavigate } from "react-router-dom";
 import "./_index.css";
+import Avatar from "@mui/material/Avatar";
 import { createAPIEndpoint, ENDPOINTS } from "../../../../api";
 
 function AddFarm() {
@@ -114,21 +115,24 @@ function AddFarm() {
             label="Has a Barge"
             onChange={handleInputChange}
           />
-          <Button
-            startIcon={<PhotoCamera />}
-            variant="contained"
-            component="label"
-          >
-            Upload Image
-            <input
-              hidden
-              name="image"
-              value={values.image}
-              accept="image/*"
-              type="file"
-              onChange={handleInputChange}
-            />
-          </Button>
+          <div className="image">
+            <Avatar alt={values.name} src={values.image} />
+            <Button
+              startIcon={<PhotoCamera />}
+              variant="contained"
+              component="label"
+            >
+              Upload Image
+              <input
+                hidden
+                name="image"
+                value={values.image}
+                accept="image/*"
+                type="file"
+                onChange={handleInputChange}
+              />
+            </Button>
+          </div>
           {errors.image && (
             <h1
               style={{
