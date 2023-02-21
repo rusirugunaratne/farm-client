@@ -45,7 +45,7 @@ function AddFarm() {
     }
   };
 
-  const validateDecimals = (number) => {
+  const validateDecimals = (number: number) => {
     const numberString = number.toString();
     if (numberString.length === 0 || !numberString.includes(".")) {
       return "Not valid";
@@ -57,7 +57,7 @@ function AddFarm() {
   };
 
   const validate = () => {
-    let temp = {};
+    let temp: any = {};
     temp.name = values.name === "" ? "Invalid Name" : "";
     temp.latitude = validateDecimals(values.latitude);
     temp.longitude = validateDecimals(values.longitude);

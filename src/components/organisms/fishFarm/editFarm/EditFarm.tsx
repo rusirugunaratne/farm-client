@@ -13,11 +13,11 @@ import useForm from "../../../../hooks/useForms";
 import { useNavigate } from "react-router-dom";
 import "./_index.css";
 import { useLocation } from "react-router-dom";
+import { createAPIEndpoint, ENDPOINTS } from "../../../../api";
 
 function EditFarm() {
   const { state } = useLocation();
-  const { name, latitude, longitude, hasBarge } = state;
-  console.log("barge", hasBarge);
+  const { id, name, latitude, longitude, hasBarge } = state;
   const navigate = useNavigate();
 
   const getFreshModel = () => ({
@@ -35,6 +35,17 @@ function EditFarm() {
     console.log(values);
     console.log(validate());
     if (validate()) {
+      createAPIEndpoint(ENDPOINTS.farm)
+        .put(id, {
+          farmId: id,
+          farmName: values.name,
+          latitude: values.latitude,
+          longitude: values.longitude,
+          image: values.image,
+          hasBarge: values.hasBarge === "on" ? true : false,
+        })
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err));
       navigate("/farms");
     }
   };
@@ -104,7 +115,7 @@ function EditFarm() {
           <FormControlLabel
             name="hasBarge"
             value={values.hasBarge}
-            control={<Switch />}
+            control={<Switch {...(hasBarge && { defaultChecked: true })} />}
             label="Has a Barge"
             onChange={handleInputChange}
           />
