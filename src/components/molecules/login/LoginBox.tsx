@@ -7,8 +7,15 @@ import { Button, CardActionArea, CardActions } from "@mui/material";
 import backImage from "../../../assets/images/login-box-background.png";
 import TextField from "@mui/material/TextField";
 import "./_index.css";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginBox() {
+  const navigate = useNavigate();
+
+  const handleLogin = () => {
+    navigate("/home");
+  };
+
   return (
     <Card sx={{ maxWidth: 345, borderRadius: 5, boxShadow: 15 }}>
       <CardActionArea disableTouchRipple={true} disableRipple={true}>
@@ -34,7 +41,12 @@ export default function LoginBox() {
         </CardContent>
       </CardActionArea>
       <CardActions sx={{ marginLeft: 2, marginTop: 2, marginBottom: 2 }}>
-        <Button size="small" color="primary" variant="contained">
+        <Button
+          onClick={handleLogin}
+          size="small"
+          color="primary"
+          variant="contained"
+        >
           Login
         </Button>
       </CardActions>
