@@ -1,12 +1,8 @@
 import "./App.css";
-import Login from "./components/organisms/login/Login";
+import { Router } from "./routes/Router";
 
 function App() {
-  return (
-    <div>
-      <Login />
-    </div>
-  );
+  return <Router></Router>;
 }
 
 export default App;
