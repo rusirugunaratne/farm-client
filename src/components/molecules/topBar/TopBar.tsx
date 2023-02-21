@@ -5,6 +5,7 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import PhishingIcon from "@mui/icons-material/Phishing";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
+import DirectionsBoatIcon from "@mui/icons-material/DirectionsBoat";
 import LockIcon from "@mui/icons-material/Lock";
 import { Link } from "react-router-dom";
 import "./_index.css";
@@ -34,6 +35,15 @@ export default function TopBar() {
               THE FIN - FARMER
             </Typography>
             <div style={{ display: "flex", gap: "10px" }}>
+              <Link className="link" to="/home">
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  startIcon={<DirectionsBoatIcon />}
+                >
+                  Home
+                </Button>
+              </Link>
               <Link className="link" to="/farms">
                 <Button
                   variant="outlined"
