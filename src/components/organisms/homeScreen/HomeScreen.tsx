@@ -1,14 +1,9 @@
 import * as React from "react";
-import TopBar from "../../molecules/appBar/TopBar";
+import TopBar from "../../molecules/topBar/TopBar";
 import FishFarmSection from "../fishFarm/FishFarmSection";
 
 function HomeScreen() {
-  return (
-    <div>
-      <TopBar />
-      <FishFarmSection />
-    </div>
-  );
+  return <div></div>;
 }
 
 export default HomeScreen;

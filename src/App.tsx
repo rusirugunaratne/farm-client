@@ -1,14 +1,8 @@
 import "./App.css";
-import HomeScreen from "./components/organisms/homeScreen/HomeScreen";
-import Login from "./components/organisms/login/Login";
+import { Router } from "./routes/Router";
 
 function App() {
-  return (
-    <div>
-      {/* <Login /> */}
-      <HomeScreen />
-    </div>
-  );
+  return <Router></Router>;
 }
 
 export default App;
