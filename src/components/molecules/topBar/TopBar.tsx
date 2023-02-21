@@ -15,7 +15,7 @@ export default function TopBar() {
   return (
     useFindPath() !== "/" && (
       <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="static">
+        <AppBar position="fixed">
           <Toolbar>
             <Typography
               variant="h6"
