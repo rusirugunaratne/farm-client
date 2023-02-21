@@ -12,6 +12,7 @@ import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import useForm from "../../../../hooks/useForms";
 import { useNavigate } from "react-router-dom";
 import "./_index.css";
+import { createAPIEndpoint, ENDPOINTS } from "../../../../api";
 
 function AddFarm() {
   const navigate = useNavigate();
@@ -29,8 +30,17 @@ function AddFarm() {
 
   const handleAddFarm = () => {
     console.log(values);
-    console.log(validate());
     if (validate()) {
+      createAPIEndpoint(ENDPOINTS.farm)
+        .post({
+          farmName: values.name,
+          latitude: values.latitude,
+          longitude: values.longitude,
+          image: values.image,
+          hasBarge: values.hasBarge === "on" ? true : false,
+        })
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err));
       navigate("/farms");
     }
   };
