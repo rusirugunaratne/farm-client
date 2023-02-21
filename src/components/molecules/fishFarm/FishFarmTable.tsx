@@ -15,6 +15,7 @@ import DeleteSweepIcon from "@mui/icons-material/DeleteSweep";
 import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
 import "./_index.css";
+import { useNavigate } from "react-router-dom";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -36,19 +37,10 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number
-) {
-  return { name, calories, fat, carbs, protein };
-}
-
 const rows = farms;
 
 export default function FishFarmTable() {
+  const navigate = useNavigate();
   return (
     <TableContainer className="farm-table" component={Paper}>
       <Table sx={{ minWidth: 600 }} aria-label="customized table">
@@ -66,24 +58,34 @@ export default function FishFarmTable() {
         </TableHead>
         <TableBody>
           {rows.map((row) => (
-            <StyledTableRow key={row.Id}>
+            <StyledTableRow key={row.id}>
               <StyledTableCell component="th" scope="row">
-                {row.Id}
+                {row.id}
               </StyledTableCell>
               <StyledTableCell align="right">
-                {<Avatar alt={row.Name} src={row.Image} />}
+                {<Avatar alt={row.name} src={row.image} />}
               </StyledTableCell>
-              <StyledTableCell align="right">{row.Name}</StyledTableCell>
+              <StyledTableCell align="right">{row.name}</StyledTableCell>
 
-              <StyledTableCell align="right">{row.Latitude}</StyledTableCell>
-              <StyledTableCell align="right">{row.Longitude}</StyledTableCell>
+              <StyledTableCell align="right">{row.latitude}</StyledTableCell>
+              <StyledTableCell align="right">{row.longitude}</StyledTableCell>
               <StyledTableCell align="right">
-                {row.HasBarge ? <CheckIcon /> : <ClearIcon />}
+                {row.hasBarge ? <CheckIcon /> : <ClearIcon />}
               </StyledTableCell>
 
               <StyledTableCell align="right">
                 {
                   <Button
+                    onClick={() => {
+                      navigate("editFarm", {
+                        state: {
+                          name: row.name,
+                          latitude: row.latitude,
+                          longitude: row.longitude,
+                          hasBarge: row.hasBarge ? "on" : "off",
+                        },
+                      });
+                    }}
                     variant="outlined"
                     color="secondary"
                     startIcon={<ModeEditOutlineIcon />}

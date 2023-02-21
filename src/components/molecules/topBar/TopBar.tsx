@@ -10,10 +10,30 @@ import LockIcon from "@mui/icons-material/Lock";
 import { Link } from "react-router-dom";
 import "./_index.css";
 import { useFindPath } from "../../../hooks/UseFindPath";
+import { useNavigate } from "react-router-dom";
 
 export default function TopBar() {
+  const navigate = useNavigate();
+  const path = useFindPath();
+
+  const getSection = () => {
+    if (path === "/home") {
+      return "HOME";
+    } else if (path === "/farms") {
+      return "FARMS";
+    } else if (path === "/workers") {
+      return "WORKERS";
+    } else if (path === "/farms/addFarm") {
+      return "ADD FARM";
+    } else if (path === "/farms/editFarm") {
+      return "EDIT FARM";
+    } else {
+      return "";
+    }
+  };
+
   return (
-    useFindPath() !== "/" && (
+    path !== "/" && (
       <Box sx={{ flexGrow: 1 }}>
         <AppBar position="fixed">
           <Toolbar>
@@ -21,7 +41,7 @@ export default function TopBar() {
               variant="h6"
               noWrap
               component="a"
-              href="/"
+              href="/home"
               sx={{
                 mr: 2,
                 flexGrow: 1,
@@ -32,7 +52,7 @@ export default function TopBar() {
                 textDecoration: "none",
               }}
             >
-              THE FIN - FARMER
+              {"THE FIN - FARMER | " + getSection()}
             </Typography>
             <div style={{ display: "flex", gap: "10px" }}>
               <Link className="link" to="/home">
@@ -63,6 +83,9 @@ export default function TopBar() {
                 </Button>
               </Link>
               <Button
+                onClick={() => {
+                  navigate("/");
+                }}
                 variant="contained"
                 color="warning"
                 startIcon={<LockIcon />}
