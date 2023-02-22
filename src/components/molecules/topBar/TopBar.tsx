@@ -27,6 +27,8 @@ export default function TopBar() {
       return "ADD FARM";
     } else if (path === "/farms/editFarm") {
       return "EDIT FARM";
+    } else if (path === "/workers/addWorker") {
+      return "ADD WORKER";
     } else {
       return "";
     }
