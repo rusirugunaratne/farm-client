@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const BASE_URL = "http://localhost:33958/";
+export const BASE_URL = "http://localhost:5026/";
 
 export const ENDPOINTS = {
   farm: "Farm",

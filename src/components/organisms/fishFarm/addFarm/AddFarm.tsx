@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 import "./_index.css";
 import Avatar from "@mui/material/Avatar";
 import { createAPIEndpoint, ENDPOINTS } from "../../../../api";
+import SailingIcon from "@mui/icons-material/Sailing";
 
 function AddFarm() {
   const navigate = useNavigate();
@@ -24,12 +25,20 @@ function AddFarm() {
     latitude: 0,
     longitude: 0,
     hasBarge: "off",
+    imageFile: null,
   });
 
   const { values, setValues, errors, setErrors, handleInputChange } =
     useForm(getFreshModel);
 
   const handleAddFarm = () => {
+    const formData = new FormData();
+    formData.append("farmName", values.name);
+    formData.append("latitude", values.latitude);
+    formData.append("longitude", values.longitude);
+    formData.append("image", values.image);
+    formData.append("hasBarge", values.hasBarge === "on" ? "1" : "0");
+    formData.append("imageFile", values.imageFile);
     console.log(values);
     if (validate()) {
       createAPIEndpoint(ENDPOINTS.farm)
@@ -37,12 +46,13 @@ function AddFarm() {
           farmName: values.name,
           latitude: values.latitude,
           longitude: values.longitude,
-          image: values.image,
+          image: "",
           hasBarge: values.hasBarge === "on" ? true : false,
+          // imageFile: values.imageFile,
         })
         .then((res) => console.log(res))
         .catch((err) => console.log(err));
-      navigate("/farms");
+      // navigate("/farms");
     }
   };
 
@@ -54,6 +64,18 @@ function AddFarm() {
       return numberString.split(".")[1].length === 4
         ? ""
         : "Should be correct for 4 decimal places";
+    }
+  };
+
+  const handleInputImage = (e: any) => {
+    if (e.target.files && e.target.files[0]) {
+      let imageFile = e.target.files[0];
+      const reader = new FileReader();
+
+      reader.onload = (x) => {
+        setValues({ ...values, imageFile: imageFile, image: x.target?.result });
+      };
+      reader.readAsDataURL(imageFile);
     }
   };
 
@@ -116,7 +138,9 @@ function AddFarm() {
             onChange={handleInputChange}
           />
           <div className="image">
-            <Avatar alt={values.name} src={values.image} />
+            <Avatar variant="rounded" alt={values.name} src={values.image}>
+              <SailingIcon />
+            </Avatar>
             <Button
               startIcon={<PhotoCamera />}
               variant="contained"
@@ -126,10 +150,9 @@ function AddFarm() {
               <input
                 hidden
                 name="image"
-                value={values.image}
                 accept="image/*"
                 type="file"
-                onChange={handleInputChange}
+                onChange={handleInputImage}
               />
             </Button>
           </div>
