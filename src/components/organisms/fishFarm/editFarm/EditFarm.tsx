@@ -19,12 +19,12 @@ import Avatar from "@mui/material/Avatar";
 
 function EditFarm() {
   const { state } = useLocation();
-  const { id, name, latitude, longitude, hasBarge } = state;
+  const { id, name, latitude, longitude, hasBarge, image } = state;
   const navigate = useNavigate();
 
   const getFreshModel = () => ({
     name: name,
-    image: "",
+    image: image,
     latitude: latitude,
     longitude: longitude,
     hasBarge: hasBarge,

@@ -19,6 +19,7 @@ import { createAPIEndpoint, ENDPOINTS } from "../../../api";
 import Popup from "../popup/DeleteFarmPopup";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
+import DeleteFarmPopup from "../popup/DeleteFarmPopup";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -49,7 +50,7 @@ export default function WorkerTable() {
   const [isLoading, setIsLoading] = useState(true);
 
   const handleDelete = (id: number) => {
-    createAPIEndpoint(ENDPOINTS.farm)
+    createAPIEndpoint(ENDPOINTS.worker)
       .delete(id)
       .then((res) => console.log(res))
       .catch((err) => console.log(err));
@@ -121,13 +122,16 @@ export default function WorkerTable() {
                 {
                   <Button
                     onClick={() => {
-                      navigate("editFarm", {
+                      navigate("editWorker", {
                         state: {
-                          id: row.farmId,
-                          name: row.farmName,
-                          latitude: row.latitude,
-                          longitude: row.longitude,
-                          hasBarge: row.hasBarge ? "on" : "off",
+                          id: row.id,
+                          name: row.name,
+                          age: row.age,
+                          email: row.email,
+                          farm: row.farm,
+                          position: row.position,
+                          certifiedUntil: row.certifiedUntil,
+                          image: row.image,
                         },
                       });
                     }}
@@ -144,7 +148,7 @@ export default function WorkerTable() {
                   <Button
                     onClick={() => {
                       setOpenPopup(true);
-                      setCurrentId(row.farmId);
+                      setCurrentId(row.id);
                     }}
                     variant="contained"
                     color="warning"
@@ -159,7 +163,7 @@ export default function WorkerTable() {
         </TableBody>
       </Table>
       {openPopup && (
-        <Popup
+        <DeleteFarmPopup
           open={openPopup}
           onDelete={() => handleDelete(currentId)}
           id={currentId}

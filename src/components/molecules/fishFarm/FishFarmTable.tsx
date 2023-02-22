@@ -16,7 +16,7 @@ import ClearIcon from "@mui/icons-material/Clear";
 import "./_index.css";
 import { useNavigate } from "react-router-dom";
 import { createAPIEndpoint, ENDPOINTS } from "../../../api";
-import Popup from "../popup/DeleteFarmPopup";
+import DeleteFarmPopup from "../popup/DeleteFarmPopup";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 
@@ -120,6 +120,7 @@ export default function FishFarmTable() {
                         state: {
                           id: row.farmId,
                           name: row.farmName,
+                          image: row.image,
                           latitude: row.latitude,
                           longitude: row.longitude,
                           hasBarge: row.hasBarge ? "on" : "off",
@@ -154,7 +155,7 @@ export default function FishFarmTable() {
         </TableBody>
       </Table>
       {openPopup && (
-        <Popup
+        <DeleteFarmPopup
           open={openPopup}
           onDelete={() => handleDelete(currentId)}
           id={currentId}

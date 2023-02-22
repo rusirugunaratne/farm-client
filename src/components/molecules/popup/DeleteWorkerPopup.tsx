@@ -17,7 +17,7 @@ const Transition = React.forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function DeleteFarmPopup(props: any) {
+export default function DeleteWorkerPopup(props: any) {
   const [open, setOpen] = React.useState(props.open);
 
   const handleClickOpen = () => {
