@@ -1,0 +1,40 @@
+.p-box {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+}
+
+.l-box {
+  width: 50vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(rgba(255, 81, 0, 0.591), rgba(32, 31, 31, 0.731)),
+    url("../../../assets/images/login-box-background.png");
+  background-size: contain;
+  text-align: center;
+}
+
+.l-box:hover {
+  background: linear-gradient(rgba(8, 0, 255, 0.591), rgba(32, 31, 31, 0.731)),
+    url("../../../assets/images/login-box-background.png");
+  background-size: contain;
+}
+
+.r-box {
+  width: 50vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(rgba(157, 2, 134, 0.591), rgba(32, 31, 31, 0.731)),
+    url("../../../assets/images/login-box-background.png");
+  background-size: contain;
+  text-align: center;
+}
+
+.r-box:hover {
+  background: linear-gradient(rgba(8, 0, 255, 0.591), rgba(32, 31, 31, 0.731)),
+    url("../../../assets/images/login-box-background.png");
+  background-size: contain;
+}
