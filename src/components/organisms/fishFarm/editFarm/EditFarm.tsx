@@ -13,11 +13,13 @@ import useForm from "../../../../hooks/useForms";
 import { useNavigate } from "react-router-dom";
 import "./_index.css";
 import { useLocation } from "react-router-dom";
+import { createAPIEndpoint, ENDPOINTS } from "../../../../api";
+import SailingIcon from "@mui/icons-material/Sailing";
+import Avatar from "@mui/material/Avatar";
 
 function EditFarm() {
   const { state } = useLocation();
-  const { name, latitude, longitude, hasBarge } = state;
-  console.log("barge", hasBarge);
+  const { id, name, latitude, longitude, hasBarge } = state;
   const navigate = useNavigate();
 
   const getFreshModel = () => ({
@@ -31,10 +33,37 @@ function EditFarm() {
   const { values, setValues, errors, setErrors, handleInputChange } =
     useForm(getFreshModel);
 
+  const handleInputImage = (e: any) => {
+    if (e.target.files && e.target.files[0]) {
+      let imageFile = e.target.files[0];
+      const reader = new FileReader();
+
+      reader.onload = (x) => {
+        setValues({ ...values, imageFile: imageFile, image: x.target?.result });
+      };
+      reader.readAsDataURL(imageFile);
+    }
+  };
+
   const handleAddFarm = () => {
-    console.log(values);
-    console.log(validate());
     if (validate()) {
+      const formData = new FormData();
+      formData.append("file", values.imageFile);
+      createAPIEndpoint(ENDPOINTS.fileUpload)
+        .post(formData)
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err));
+      createAPIEndpoint(ENDPOINTS.farm)
+        .put(id, {
+          farmId: id,
+          farmName: values.name,
+          latitude: values.latitude,
+          longitude: values.longitude,
+          image: values.image,
+          hasBarge: values.hasBarge === "on" ? true : false,
+        })
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err));
       navigate("/farms");
     }
   };
@@ -104,25 +133,29 @@ function EditFarm() {
           <FormControlLabel
             name="hasBarge"
             value={values.hasBarge}
-            control={<Switch />}
+            control={<Switch {...(hasBarge && { defaultChecked: true })} />}
             label="Has a Barge"
             onChange={handleInputChange}
           />
-          <Button
-            startIcon={<PhotoCamera />}
-            variant="contained"
-            component="label"
-          >
-            Upload Image
-            <input
-              hidden
-              name="image"
-              value={values.image}
-              accept="image/*"
-              type="file"
-              onChange={handleInputChange}
-            />
-          </Button>
+          <div className="image">
+            <Avatar variant="rounded" alt={values.name} src={values.image}>
+              <SailingIcon />
+            </Avatar>
+            <Button
+              startIcon={<PhotoCamera />}
+              variant="contained"
+              component="label"
+            >
+              Upload Image
+              <input
+                hidden
+                name="image"
+                accept="image/*"
+                type="file"
+                onChange={handleInputImage}
+              />
+            </Button>
+          </div>{" "}
           {errors.image && (
             <h1
               style={{

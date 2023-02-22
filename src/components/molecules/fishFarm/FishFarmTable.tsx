@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useEffect, useState } from "react";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -8,7 +8,6 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Avatar from "@mui/material/Avatar";
-import { farms } from "../../../assets/data/modelData";
 import Button from "@mui/material/Button";
 import ModeEditOutlineIcon from "@mui/icons-material/ModeEditOutline";
 import DeleteSweepIcon from "@mui/icons-material/DeleteSweep";
@@ -16,6 +15,8 @@ import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
 import "./_index.css";
 import { useNavigate } from "react-router-dom";
+import { createAPIEndpoint, ENDPOINTS } from "../../../api";
+import Popup from "../popup/DeleteFarmPopup";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -37,17 +38,38 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const rows = farms;
+// const rows = farms;
 
 export default function FishFarmTable() {
+  const [rows, setRows] = useState([]);
+  const [openPopup, setOpenPopup] = useState(false);
+  const [currentId, setCurrentId] = useState(1);
+
+  const handleDelete = (id: number) => {
+    createAPIEndpoint(ENDPOINTS.farm)
+      .delete(id)
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  };
+
+  useEffect(() => {
+    createAPIEndpoint(ENDPOINTS.farm)
+      .fetch()
+      .then((res) => {
+        setRows(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [rows]);
+
   const navigate = useNavigate();
   return (
     <TableContainer className="farm-table" component={Paper}>
       <Table sx={{ minWidth: 600 }} aria-label="customized table">
         <TableHead>
           <TableRow>
-            <StyledTableCell width="10%">ID</StyledTableCell>
-            <StyledTableCell align="right">Image</StyledTableCell>
+            <StyledTableCell align="right"></StyledTableCell>
             <StyledTableCell align="right">Name</StyledTableCell>
             <StyledTableCell align="right">Latitude</StyledTableCell>
             <StyledTableCell align="right">Longitude</StyledTableCell>
@@ -57,15 +79,12 @@ export default function FishFarmTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <StyledTableRow key={row.id}>
-              <StyledTableCell component="th" scope="row">
-                {row.id}
-              </StyledTableCell>
-              <StyledTableCell align="right">
+          {rows.map((row: any) => (
+            <StyledTableRow key={row.farmId}>
+              <StyledTableCell align="center">
                 {<Avatar alt={row.name} src={row.image} />}
               </StyledTableCell>
-              <StyledTableCell align="right">{row.name}</StyledTableCell>
+              <StyledTableCell align="right">{row.farmName}</StyledTableCell>
 
               <StyledTableCell align="right">{row.latitude}</StyledTableCell>
               <StyledTableCell align="right">{row.longitude}</StyledTableCell>
@@ -79,7 +98,8 @@ export default function FishFarmTable() {
                     onClick={() => {
                       navigate("editFarm", {
                         state: {
-                          name: row.name,
+                          id: row.farmId,
+                          name: row.farmName,
                           latitude: row.latitude,
                           longitude: row.longitude,
                           hasBarge: row.hasBarge ? "on" : "off",
@@ -97,6 +117,10 @@ export default function FishFarmTable() {
               <StyledTableCell align="right">
                 {
                   <Button
+                    onClick={() => {
+                      setOpenPopup(true);
+                      setCurrentId(row.farmId);
+                    }}
                     variant="contained"
                     color="warning"
                     startIcon={<DeleteSweepIcon />}
@@ -109,6 +133,14 @@ export default function FishFarmTable() {
           ))}
         </TableBody>
       </Table>
+      {openPopup && (
+        <Popup
+          open={openPopup}
+          onDelete={() => handleDelete(currentId)}
+          id={currentId}
+          setOpen={() => setOpenPopup(false)}
+        />
+      )}
     </TableContainer>
   );
 }
