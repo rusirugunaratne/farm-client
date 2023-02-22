@@ -11,20 +11,44 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import useForm from "../../../../hooks/useForms";
 import { useNavigate } from "react-router-dom";
+import dayjs, { Dayjs } from "dayjs";
 import "./_index.css";
 import Avatar from "@mui/material/Avatar";
 import { createAPIEndpoint, ENDPOINTS } from "../../../../api";
-import SailingIcon from "@mui/icons-material/Sailing";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { useState, useEffect } from "react";
+import { z } from "zod";
 
 function AddWorker() {
+  const [farms, setFarms] = useState<any[]>([]);
+  useEffect(() => {
+    createAPIEndpoint(ENDPOINTS.farm)
+      .fetch()
+      .then((res) => {
+        setFarms(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [farms]);
+
   const navigate = useNavigate();
   const getFreshModel = () => ({
     name: "",
     image: "",
-    latitude: 0,
-    longitude: 0,
-    hasBarge: "off",
+    age: 18,
+    farm: "",
+    email: "",
+    position: "",
     imageFile: null,
+    certifiedUntil: "2023-01-01",
   });
 
   const { values, setValues, errors, setErrors, handleInputChange } =
@@ -33,34 +57,30 @@ function AddWorker() {
   const handleAddFarm = () => {
     console.log(values);
     if (validate()) {
-      const formData = new FormData();
-      formData.append("file", values.imageFile);
-      createAPIEndpoint(ENDPOINTS.fileUpload)
-        .post(formData)
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err));
-      createAPIEndpoint(ENDPOINTS.farm)
+      console.log("values", values);
+      if (values.image !== "") {
+        const formData = new FormData();
+        formData.append("file", values.imageFile);
+        createAPIEndpoint(ENDPOINTS.fileUpload)
+          .post(formData)
+          .then((res) => console.log(res))
+          .catch((err) => console.log(err));
+      }
+
+      createAPIEndpoint(ENDPOINTS.worker)
         .post({
-          farmName: values.name,
-          latitude: values.latitude,
-          longitude: values.longitude,
+          name: values.name,
+          age: values.age,
+          farm: values.farm,
+          email: values.email,
+          position: values.position,
+          certifiedUntil: values.certifiedUntil,
           image: values.image,
           hasBarge: values.hasBarge === "on" ? true : false,
         })
         .then((res) => console.log(res))
         .catch((err) => console.log(err));
-      navigate("/farms");
-    }
-  };
-
-  const validateDecimals = (number: number) => {
-    const numberString = number.toString();
-    if (numberString.length === 0 || !numberString.includes(".")) {
-      return "Not valid";
-    } else {
-      return numberString.split(".")[1].length === 4
-        ? ""
-        : "Should be correct for 4 decimal places";
+      // navigate("/farms");
     }
   };
 
@@ -79,9 +99,10 @@ function AddWorker() {
   const validate = () => {
     let temp: any = {};
     temp.name = values.name === "" ? "Invalid Name" : "";
-    temp.latitude = validateDecimals(values.latitude);
-    temp.longitude = validateDecimals(values.longitude);
-    temp.image = values.image === "" ? "Upload an Image" : "";
+    temp.age = values.age > 60 || values.age < 18 ? "Not eligible to work" : "";
+    temp.email = z.string().email().safeParse(values.email).success
+      ? ""
+      : "Not a valid email";
     setErrors(temp);
     return Object.values(temp).every((x) => x === "");
   };
@@ -105,37 +126,77 @@ function AddWorker() {
             id="outlined-helperText"
             label="Age"
             type="number"
-            value={values.latitude}
+            value={values.age}
             name="age"
             defaultValue=""
-            {...(errors.latitude && {
+            {...(errors.age && {
               error: true,
-              helperText: errors.latitude,
+              helperText: errors.age,
             })}
             onChange={handleInputChange}
           />
           <TextField
             id="outlined-helperText"
             label="Email"
-            value={values.longitude}
+            value={values.email}
             name="email"
             defaultValue=""
-            {...(errors.longitude && {
+            {...(errors.email && {
               error: true,
-              helperText: errors.longitude,
+              helperText: errors.email,
             })}
             onChange={handleInputChange}
           />
-          <FormControlLabel
-            name="hasBarge"
-            // value={values.hasBarge}
-            control={<Switch />}
-            label="Has a Barge"
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">Farm</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={values.farm}
+              label="Farm"
+              name="farm"
+              onChange={handleInputChange}
+            >
+              {farms.map((farm) => (
+                <MenuItem key={farm.farmId} value={farm.farmName}>
+                  {farm.farmName}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">Position</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={values.position}
+              name="position"
+              label="Position"
+              defaultValue={values.position}
+              onChange={handleInputChange}
+            >
+              <MenuItem value={"CEO"}>CEO</MenuItem>
+              <MenuItem value={"Worker"}>Worker</MenuItem>
+              <MenuItem value={"Captain"}>Captain</MenuItem>
+            </Select>
+          </FormControl>
+          <TextField
+            id="outlined-helperText"
+            label="Certified Until"
+            type="date"
+            value={values.certifiedUntil}
+            name="certifiedUntil"
+            // defaultValue={values.certifiedUntil}
+            {...(errors.latitude && {
+              error: true,
+              helperText: errors.latitude,
+            })}
             onChange={handleInputChange}
           />
+
           <div className="image">
             <Avatar variant="rounded" alt={values.name} src={values.image}>
-              <SailingIcon />
+              <AccountCircleIcon />
             </Avatar>
             <Button
               startIcon={<PhotoCamera />}

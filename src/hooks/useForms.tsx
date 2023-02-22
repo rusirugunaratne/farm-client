@@ -6,6 +6,8 @@ export default function useForm(getFreshModelObject: any) {
     image?: string;
     latitude?: string;
     longitude?: string;
+    age?: number;
+    email?: string;
   };
 
   const [values, setValues] = useState(getFreshModelObject());
