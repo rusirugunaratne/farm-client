@@ -18,7 +18,6 @@ import SailingIcon from "@mui/icons-material/Sailing";
 
 function AddFarm() {
   const navigate = useNavigate();
-  let [imagePath, setImagePath] = React.useState("");
   const getFreshModel = () => ({
     name: "",
     image: "",
@@ -32,23 +31,14 @@ function AddFarm() {
     useForm(getFreshModel);
 
   const handleAddFarm = () => {
-    const formData = new FormData();
-    console.log(values.imageFile);
-    formData.append("file", values.imageFile);
-    createAPIEndpoint(ENDPOINTS.fileUpload)
-      .post(formData)
-      .then((res) => setImagePath(res.data))
-      .catch((err) => console.log(err));
-
-    // const formData = new FormData();
-    // formData.append("farmName", values.name);
-    // formData.append("latitude", values.latitude);
-    // formData.append("longitude", values.longitude);
-    // formData.append("image", values.image);
-    // formData.append("hasBarge", values.hasBarge === "on" ? "1" : "0");
-    // formData.append("imageFile", values.imageFile);
     console.log(values);
     if (validate()) {
+      const formData = new FormData();
+      formData.append("file", values.imageFile);
+      createAPIEndpoint(ENDPOINTS.fileUpload)
+        .post(formData)
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err));
       createAPIEndpoint(ENDPOINTS.farm)
         .post({
           farmName: values.name,
@@ -56,11 +46,10 @@ function AddFarm() {
           longitude: values.longitude,
           image: values.image,
           hasBarge: values.hasBarge === "on" ? true : false,
-          // imageFile: values.imageFile,
         })
         .then((res) => console.log(res))
         .catch((err) => console.log(err));
-      // navigate("/farms");
+      navigate("/farms");
     }
   };
 

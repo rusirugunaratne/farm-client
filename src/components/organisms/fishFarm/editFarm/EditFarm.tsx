@@ -14,6 +14,8 @@ import { useNavigate } from "react-router-dom";
 import "./_index.css";
 import { useLocation } from "react-router-dom";
 import { createAPIEndpoint, ENDPOINTS } from "../../../../api";
+import SailingIcon from "@mui/icons-material/Sailing";
+import Avatar from "@mui/material/Avatar";
 
 function EditFarm() {
   const { state } = useLocation();
@@ -31,10 +33,26 @@ function EditFarm() {
   const { values, setValues, errors, setErrors, handleInputChange } =
     useForm(getFreshModel);
 
+  const handleInputImage = (e: any) => {
+    if (e.target.files && e.target.files[0]) {
+      let imageFile = e.target.files[0];
+      const reader = new FileReader();
+
+      reader.onload = (x) => {
+        setValues({ ...values, imageFile: imageFile, image: x.target?.result });
+      };
+      reader.readAsDataURL(imageFile);
+    }
+  };
+
   const handleAddFarm = () => {
-    console.log(values);
-    console.log(validate());
     if (validate()) {
+      const formData = new FormData();
+      formData.append("file", values.imageFile);
+      createAPIEndpoint(ENDPOINTS.fileUpload)
+        .post(formData)
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err));
       createAPIEndpoint(ENDPOINTS.farm)
         .put(id, {
           farmId: id,
@@ -119,21 +137,25 @@ function EditFarm() {
             label="Has a Barge"
             onChange={handleInputChange}
           />
-          <Button
-            startIcon={<PhotoCamera />}
-            variant="contained"
-            component="label"
-          >
-            Upload Image
-            <input
-              hidden
-              name="image"
-              value={values.image}
-              accept="image/*"
-              type="file"
-              onChange={handleInputChange}
-            />
-          </Button>
+          <div className="image">
+            <Avatar variant="rounded" alt={values.name} src={values.image}>
+              <SailingIcon />
+            </Avatar>
+            <Button
+              startIcon={<PhotoCamera />}
+              variant="contained"
+              component="label"
+            >
+              Upload Image
+              <input
+                hidden
+                name="image"
+                accept="image/*"
+                type="file"
+                onChange={handleInputImage}
+              />
+            </Button>
+          </div>{" "}
           {errors.image && (
             <h1
               style={{
