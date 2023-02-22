@@ -25,8 +25,11 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useState, useEffect } from "react";
 import { z } from "zod";
+import { useLocation } from "react-router-dom";
 
-function AddWorker() {
+function EditWorker() {
+  const { state } = useLocation();
+  const { id, name, age, email, farm, position, certifiedUntil, image } = state;
   const [farms, setFarms] = useState<any[]>([]);
   useEffect(() => {
     createAPIEndpoint(ENDPOINTS.farm)
@@ -41,14 +44,14 @@ function AddWorker() {
 
   const navigate = useNavigate();
   const getFreshModel = () => ({
-    name: "",
-    image: "",
-    age: 18,
-    farm: "",
-    email: "",
-    position: "",
+    name: name,
+    image: image,
+    age: age,
+    farm: farm,
+    email: email,
+    position: position,
     imageFile: null,
-    certifiedUntil: "2023-01-01",
+    certifiedUntil: certifiedUntil,
   });
 
   const { values, setValues, errors, setErrors, handleInputChange } =
@@ -68,7 +71,8 @@ function AddWorker() {
       }
 
       createAPIEndpoint(ENDPOINTS.worker)
-        .post({
+        .put(id, {
+          id: id,
           name: values.name,
           age: values.age,
           farm: values.farm,
@@ -152,8 +156,9 @@ function AddWorker() {
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               value={values.farm}
-              label="Farm"
+              label="farm"
               name="farm"
+              defaultValue={values.farm}
               onChange={handleInputChange}
             >
               {farms.map((farm) => (
@@ -227,7 +232,7 @@ function AddWorker() {
         </CardContent>
         <CardActions>
           <Button onClick={handleAddFarm} color="primary" size="small">
-            Add
+            Edit
           </Button>
           <Button
             onClick={() => {
@@ -244,4 +249,4 @@ function AddWorker() {
   );
 }
 
-export default AddWorker;
+export default EditWorker;

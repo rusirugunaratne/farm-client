@@ -6,7 +6,7 @@ function FishFarmSection() {
   return (
     <div>
       <FishFarmTable />
-      <BottomBar />
+      <BottomBar route="addFarm" />
     </div>
   );
 }

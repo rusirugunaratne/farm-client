@@ -8,6 +8,7 @@ import WorkerSection from "../components/organisms/workers/WorkerSection";
 import AddFarm from "../components/organisms/fishFarm/addFarm/AddFarm";
 import EditFarm from "../components/organisms/fishFarm/editFarm/EditFarm";
 import AddWorker from "../components/organisms/workers/addWorker/AddWorker";
+import EditWorker from "../components/organisms/workers/editWorker/EditWorker";
 
 export function Router() {
   return (
@@ -21,6 +22,7 @@ export function Router() {
         <Route path="/farms/editFarm" element={<EditFarm />} />
         <Route path="/workers" element={<WorkerSection />} />
         <Route path="/workers/addWorker" element={<AddWorker />} />
+        <Route path="/workers/editWorker" element={<EditWorker />} />
       </Routes>
     </BrowserRouter>
   );

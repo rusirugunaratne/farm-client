@@ -16,9 +16,10 @@ import ClearIcon from "@mui/icons-material/Clear";
 import "./_index.css";
 import { useNavigate } from "react-router-dom";
 import { createAPIEndpoint, ENDPOINTS } from "../../../api";
-import DeleteFarmPopup from "../popup/DeleteFarmPopup";
+import Popup from "../popup/DeleteFarmPopup";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
+import DeleteFarmPopup from "../popup/DeleteFarmPopup";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -42,21 +43,21 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 // const rows = farms;
 
-export default function FishFarmTable() {
+export default function WorkerTable() {
   const [rows, setRows] = useState([]);
   const [openPopup, setOpenPopup] = useState(false);
   const [currentId, setCurrentId] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
 
   const handleDelete = (id: number) => {
-    createAPIEndpoint(ENDPOINTS.farm)
+    createAPIEndpoint(ENDPOINTS.worker)
       .delete(id)
       .then((res) => console.log(res))
       .catch((err) => console.log(err));
   };
 
   useEffect(() => {
-    createAPIEndpoint(ENDPOINTS.farm)
+    createAPIEndpoint(ENDPOINTS.worker)
       .fetch()
       .then((res) => {
         setRows(res.data);
@@ -75,9 +76,11 @@ export default function FishFarmTable() {
           <TableRow>
             <StyledTableCell align="right"></StyledTableCell>
             <StyledTableCell align="right">Name</StyledTableCell>
-            <StyledTableCell align="right">Latitude</StyledTableCell>
-            <StyledTableCell align="right">Longitude</StyledTableCell>
-            <StyledTableCell align="right">Barge</StyledTableCell>
+            <StyledTableCell align="right">Age</StyledTableCell>
+            <StyledTableCell align="right">Email</StyledTableCell>
+            <StyledTableCell align="right">Farm</StyledTableCell>
+            <StyledTableCell align="right">Position</StyledTableCell>
+            <StyledTableCell align="right">Certified Until</StyledTableCell>
             <StyledTableCell align="right">Edit</StyledTableCell>
             <StyledTableCell align="right">Delete</StyledTableCell>
           </TableRow>
@@ -100,30 +103,35 @@ export default function FishFarmTable() {
             </Box>
           )}
           {rows.map((row: any) => (
-            <StyledTableRow key={row.farmId}>
+            <StyledTableRow key={row.id}>
               <StyledTableCell align="center">
                 {<Avatar alt={row.name} src={row.image} />}
               </StyledTableCell>
-              <StyledTableCell align="right">{row.farmName}</StyledTableCell>
+              <StyledTableCell align="right">{row.name}</StyledTableCell>
 
-              <StyledTableCell align="right">{row.latitude}</StyledTableCell>
-              <StyledTableCell align="right">{row.longitude}</StyledTableCell>
+              <StyledTableCell align="right">{row.age}</StyledTableCell>
+              <StyledTableCell align="right">{row.email}</StyledTableCell>
+
+              <StyledTableCell align="right">{row.farm}</StyledTableCell>
+              <StyledTableCell align="right">{row.position}</StyledTableCell>
               <StyledTableCell align="right">
-                {row.hasBarge ? <CheckIcon /> : <ClearIcon />}
+                {row.certifiedUntil}
               </StyledTableCell>
 
               <StyledTableCell align="right">
                 {
                   <Button
                     onClick={() => {
-                      navigate("editFarm", {
+                      navigate("editWorker", {
                         state: {
-                          id: row.farmId,
-                          name: row.farmName,
+                          id: row.id,
+                          name: row.name,
+                          age: row.age,
+                          email: row.email,
+                          farm: row.farm,
+                          position: row.position,
+                          certifiedUntil: row.certifiedUntil,
                           image: row.image,
-                          latitude: row.latitude,
-                          longitude: row.longitude,
-                          hasBarge: row.hasBarge ? "on" : "off",
                         },
                       });
                     }}
@@ -140,7 +148,7 @@ export default function FishFarmTable() {
                   <Button
                     onClick={() => {
                       setOpenPopup(true);
-                      setCurrentId(row.farmId);
+                      setCurrentId(row.id);
                     }}
                     variant="contained"
                     color="warning"

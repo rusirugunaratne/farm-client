@@ -17,13 +17,13 @@ const StyledFab = styled(Fab)({
   margin: "0 auto",
 });
 
-export default function BottomBar() {
+export default function BottomBar(props: any) {
   return (
     <React.Fragment>
       <CssBaseline />
       <AppBar position="fixed" color="primary" sx={{ top: "auto", bottom: 0 }}>
         <Toolbar>
-          <Link to="addFarm">
+          <Link to={props.route}>
             <StyledFab color="secondary" aria-label="add">
               <AddIcon />
             </StyledFab>
