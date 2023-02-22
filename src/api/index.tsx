@@ -4,6 +4,7 @@ export const BASE_URL = "http://localhost:5026/";
 
 export const ENDPOINTS = {
   farm: "Farm",
+  fileUpload: "FileUploading/UploadFiles",
 };
 
 export const createAPIEndpoint = (endpoint: any) => {
