@@ -17,6 +17,8 @@ import "./_index.css";
 import { useNavigate } from "react-router-dom";
 import { createAPIEndpoint, ENDPOINTS } from "../../../api";
 import Popup from "../popup/DeleteFarmPopup";
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -44,6 +46,7 @@ export default function FishFarmTable() {
   const [rows, setRows] = useState([]);
   const [openPopup, setOpenPopup] = useState(false);
   const [currentId, setCurrentId] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleDelete = (id: number) => {
     createAPIEndpoint(ENDPOINTS.farm)
@@ -57,6 +60,7 @@ export default function FishFarmTable() {
       .fetch()
       .then((res) => {
         setRows(res.data);
+        setIsLoading(false);
       })
       .catch((err) => {
         console.log(err);
@@ -79,6 +83,22 @@ export default function FishFarmTable() {
           </TableRow>
         </TableHead>
         <TableBody>
+          {isLoading && (
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                alignContent: "center",
+                textAlign: "center",
+                margin: 10,
+                gap: 5,
+              }}
+            >
+              <CircularProgress />
+              <p>Loading...</p>
+            </Box>
+          )}
           {rows.map((row: any) => (
             <StyledTableRow key={row.farmId}>
               <StyledTableCell align="center">
