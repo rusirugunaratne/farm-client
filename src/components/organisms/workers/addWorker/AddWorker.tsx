@@ -76,11 +76,10 @@ function AddWorker() {
           position: values.position,
           certifiedUntil: values.certifiedUntil,
           image: values.image,
-          hasBarge: values.hasBarge === "on" ? true : false,
         })
         .then((res) => console.log(res))
         .catch((err) => console.log(err));
-      // navigate("/farms");
+      navigate("/workers");
     }
   };
 
