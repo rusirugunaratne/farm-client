@@ -236,7 +236,7 @@ function EditWorker() {
           </Button>
           <Button
             onClick={() => {
-              navigate("/farms");
+              navigate("/workers");
             }}
             color="warning"
             size="small"

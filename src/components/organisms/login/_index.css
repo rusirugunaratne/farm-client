@@ -8,9 +8,11 @@
 .left-box {
   display: flex;
   justify-content: center;
+  align-items: center;
   height: 100%;
   width: 50vw;
   text-align: center;
+  background-color: #062c47;
 }
 
 .right-box {
@@ -18,7 +20,37 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(rgba(255, 81, 0, 0.591), rgba(32, 31, 31, 0.731)),
-    url("../../../assets/images/login-box-background.png");
-  background-size: contain;
+  background: linear-gradient(rgba(6, 44, 71, 0.591), rgba(32, 31, 31, 0.731)),
+    url("../../../assets/images/loginimage.jpg");
+  background-size: cover;
+}
+
+.image {
+  height: 20%;
+  width: auto;
+  text-align: center;
+}
+
+h1 {
+  font-size: 70px;
+  letter-spacing: 10px;
+}
+
+.left-box {
+  background: linear-gradient(-45deg, #01377a, #3ce7e1, #004260, #002d3e);
+  background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
+  height: 100vh;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }

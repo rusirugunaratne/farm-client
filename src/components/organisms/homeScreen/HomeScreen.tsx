@@ -1,25 +1,16 @@
 import * as React from "react";
-import HomeCard from "../../molecules/homeCard/HomeCard";
 import "./_index.css";
+import { useNavigate } from "react-router-dom";
 
 function HomeScreen() {
+  const navigate = useNavigate();
   return (
     <div className="p-box">
-      <div className="l-box">
-        <HomeCard
-          name="farm"
-          title="Fish Farms"
-          details="Manage Fish Farms"
-          route="/farms"
-        />
+      <div onClick={() => navigate("/farms")} className="l-box">
+        <h1>FARMS</h1>
       </div>
-      <div className="r-box">
-        <HomeCard
-          name="worker"
-          title="Workers"
-          details="Manage Workers"
-          route="/workers"
-        />
+      <div onClick={() => navigate("/workers")} className="r-box">
+        <h1>WORKERS</h1>
       </div>
     </div>
   );

@@ -39,7 +39,7 @@ export default function TopBar() {
   return (
     path !== "/" && (
       <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="fixed">
+        <AppBar position="fixed" style={{ backgroundColor: "#062c47" }}>
           <Toolbar>
             <Typography
               variant="h6"
@@ -56,7 +56,7 @@ export default function TopBar() {
                 textDecoration: "none",
               }}
             >
-              {"THE FIN - FARMER | " + getSection()}
+              {"Havbruksloggen | " + getSection()}
             </Typography>
             <div style={{ display: "flex", gap: "10px" }}>
               <Link className="link" to="/home">
@@ -71,7 +71,7 @@ export default function TopBar() {
               <Link className="link" to="/farms">
                 <Button
                   variant="outlined"
-                  color="inherit"
+                  color="primary"
                   startIcon={<PhishingIcon />}
                 >
                   Farms
@@ -80,7 +80,7 @@ export default function TopBar() {
               <Link className="link" to="/workers">
                 <Button
                   variant="outlined"
-                  color="inherit"
+                  color="primary"
                   startIcon={<PeopleAltIcon />}
                 >
                   Workers

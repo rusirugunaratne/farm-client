@@ -10,16 +10,21 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(rgba(255, 81, 0, 0.591), rgba(32, 31, 31, 0.731)),
-    url("../../../assets/images/login-box-background.png");
-  background-size: contain;
+  background: linear-gradient(rgba(6, 44, 71, 0.591), rgba(32, 31, 31, 0.731)),
+    url("../../../assets/images/fish-farm.jpg");
+  background-size: cover;
   text-align: center;
+  filter: grayscale(100%);
 }
 
 .l-box:hover {
-  background: linear-gradient(rgba(8, 0, 255, 0.591), rgba(32, 31, 31, 0.731)),
-    url("../../../assets/images/login-box-background.png");
-  background-size: contain;
+  background: linear-gradient(
+      rgba(70, 185, 137, 0.591),
+      rgba(32, 31, 31, 0.731)
+    ),
+    url("../../../assets/images/fish-farm.jpg");
+  background-size: cover;
+  filter: grayscale(0%);
 }
 
 .r-box {
@@ -27,14 +32,19 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(rgba(157, 2, 134, 0.591), rgba(32, 31, 31, 0.731)),
-    url("../../../assets/images/login-box-background.png");
-  background-size: contain;
+  background: linear-gradient(rgba(0, 82, 107, 0.591), rgba(32, 31, 31, 0.731)),
+    url("../../../assets/images/worker.jpg");
+  background-size: cover;
   text-align: center;
+  filter: grayscale(100%);
 }
 
 .r-box:hover {
-  background: linear-gradient(rgba(8, 0, 255, 0.591), rgba(32, 31, 31, 0.731)),
-    url("../../../assets/images/login-box-background.png");
-  background-size: contain;
+  background: linear-gradient(
+      rgba(70, 185, 137, 0.591),
+      rgba(32, 31, 31, 0.731)
+    ),
+    url("../../../assets/images/worker.jpg");
+  background-size: cover;
+  filter: grayscale(0%);
 }
