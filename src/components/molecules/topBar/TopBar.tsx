@@ -56,7 +56,7 @@ export default function TopBar() {
                 textDecoration: "none",
               }}
             >
-              {"Havbruksloggen | " + getSection()}
+              {"Aquaculture | " + getSection()}
             </Typography>
             <div style={{ display: "flex", gap: "10px" }}>
               <Link className="link" to="/home">

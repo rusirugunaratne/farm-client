@@ -1,5 +1,5 @@
 import * as React from "react";
-import logo from "../../../assets/images/logo-topp.png";
+import logo from "../../../assets/images/logo.svg";
 import LoginBox from "../../molecules/login/LoginBox";
 import "./_index.css";
 
