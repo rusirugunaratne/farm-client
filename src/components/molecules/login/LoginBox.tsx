@@ -92,6 +92,7 @@ export default function LoginBox() {
               })}
             />
             <TextField
+              type="password"
               className="card-content"
               id="outlined-helperText"
               label="Password"
