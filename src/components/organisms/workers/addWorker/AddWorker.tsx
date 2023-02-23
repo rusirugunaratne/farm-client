@@ -4,40 +4,32 @@ import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
-import Switch from "@mui/material/Switch";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import useForm from "../../../../hooks/useForms";
 import { useNavigate } from "react-router-dom";
-import dayjs, { Dayjs } from "dayjs";
 import "./_index.css";
 import Avatar from "@mui/material/Avatar";
 import { createAPIEndpoint, ENDPOINTS } from "../../../../api";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
+import Select from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
-import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { useState, useEffect } from "react";
 import { z } from "zod";
+import { useQuery } from "@tanstack/react-query";
 
 function AddWorker() {
-  const [farms, setFarms] = useState<any[]>([]);
-  useEffect(() => {
-    createAPIEndpoint(ENDPOINTS.farm)
+  const { data: farms } = useQuery(["addWorker"], () => {
+    return createAPIEndpoint(ENDPOINTS.farm)
       .fetch()
       .then((res) => {
-        setFarms(res.data);
+        return res.data;
       })
       .catch((err) => {
         console.log(err);
       });
-  }, [farms]);
+  });
 
   const navigate = useNavigate();
   const getFreshModel = () => ({
@@ -156,7 +148,7 @@ function AddWorker() {
               name="farm"
               onChange={handleInputChange}
             >
-              {farms.map((farm) => (
+              {farms?.map((farm: any) => (
                 <MenuItem key={farm.farmId} value={farm.farmName}>
                   {farm.farmName}
                 </MenuItem>

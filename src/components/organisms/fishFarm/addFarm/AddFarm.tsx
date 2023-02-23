@@ -4,13 +4,12 @@ import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Switch from "@mui/material/Switch";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import useForm from "../../../../hooks/useForms";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./_index.css";
 import Avatar from "@mui/material/Avatar";
 import { createAPIEndpoint, ENDPOINTS } from "../../../../api";
@@ -170,6 +169,7 @@ function AddFarm() {
           <Button onClick={handleAddFarm} color="primary" size="small">
             Add
           </Button>
+
           <Button
             onClick={() => {
               navigate("/farms");

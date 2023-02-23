@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -11,15 +11,13 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import ModeEditOutlineIcon from "@mui/icons-material/ModeEditOutline";
 import DeleteSweepIcon from "@mui/icons-material/DeleteSweep";
-import CheckIcon from "@mui/icons-material/Check";
-import ClearIcon from "@mui/icons-material/Clear";
 import "./_index.css";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { createAPIEndpoint, ENDPOINTS } from "../../../api";
-import Popup from "../popup/DeleteFarmPopup";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import DeleteFarmPopup from "../popup/DeleteFarmPopup";
+import { useQuery } from "@tanstack/react-query";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -41,34 +39,40 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-// const rows = farms;
-
 export default function WorkerTable() {
-  const [rows, setRows] = useState([]);
   const [openPopup, setOpenPopup] = useState(false);
   const [currentId, setCurrentId] = useState(1);
-  const [isLoading, setIsLoading] = useState(true);
 
-  const handleDelete = (id: number) => {
-    createAPIEndpoint(ENDPOINTS.worker)
-      .delete(id)
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
-  };
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    createAPIEndpoint(ENDPOINTS.worker)
+  const {
+    data: rows,
+    isLoading,
+    refetch,
+  } = useQuery(["worker"], () => {
+    return createAPIEndpoint(ENDPOINTS.worker)
       .fetch()
       .then((res) => {
-        setRows(res.data);
-        setIsLoading(false);
+        return res.data;
       })
       .catch((err) => {
         console.log(err);
       });
-  }, [rows]);
+  });
 
-  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    refetch();
+  }, [location.key]);
+
+  const handleDelete = (id: number) => {
+    createAPIEndpoint(ENDPOINTS.worker)
+      .delete(id)
+      .then((res) => refetch())
+      .catch((err) => console.log(err));
+  };
+
   return (
     <TableContainer className="farm-table" component={Paper}>
       <Table sx={{ minWidth: 600 }} aria-label="customized table">
@@ -102,7 +106,7 @@ export default function WorkerTable() {
               <p>Loading...</p>
             </Box>
           )}
-          {rows.map((row: any) => (
+          {rows?.map((row: any) => (
             <StyledTableRow key={row.id}>
               <StyledTableCell align="center">
                 {<Avatar alt={row.name} src={row.image} />}
