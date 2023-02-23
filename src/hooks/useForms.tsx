@@ -8,6 +8,8 @@ export default function useForm(getFreshModelObject: any) {
     longitude?: string;
     age?: number;
     email?: string;
+    username?: string;
+    password?: string;
   };
 
   const [values, setValues] = useState(getFreshModelObject());

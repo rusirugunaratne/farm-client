@@ -18,12 +18,15 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import { z } from "zod";
 import { useLocation } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
 
 function EditWorker() {
+  const queryClient = useQueryClient();
   const { state } = useLocation();
   const { id, name, age, email, farm, position, certifiedUntil, image } = state;
-  const { data: farms } = useQuery(["addWorker"], () => {
+  const { data: farms, isLoading } = useQuery(["addWorker"], () => {
     return createAPIEndpoint(ENDPOINTS.farm)
       .fetch()
       .then((res) => {
@@ -50,7 +53,6 @@ function EditWorker() {
     useForm(getFreshModel);
 
   const handleAddFarm = () => {
-    console.log(values);
     if (validate()) {
       console.log("values", values);
       if (values.image !== "") {
@@ -101,6 +103,25 @@ function EditWorker() {
     setErrors(temp);
     return Object.values(temp).every((x) => x === "");
   };
+
+  if (isLoading) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+          alignContent: "center",
+          textAlign: "center",
+          margin: 10,
+          gap: 5,
+        }}
+      >
+        <CircularProgress />
+        <p>Loading...</p>
+      </Box>
+    );
+  }
 
   return (
     <div className="container">
@@ -182,7 +203,6 @@ function EditWorker() {
             type="date"
             value={values.certifiedUntil}
             name="certifiedUntil"
-            // defaultValue={values.certifiedUntil}
             {...(errors.latitude && {
               error: true,
               helperText: errors.latitude,
