@@ -1,10 +1,10 @@
 import axios from "axios";
 
-export const BASE_URL = "http://localhost:5026/";
+export const BASE_URL = "https://localhost:7244/";
 
 export const ENDPOINTS = {
   farm: "Farm",
-  fileUpload: "FileUploading/UploadFiles",
+  fileUpload: "FileUpload/UploadFiles",
   worker: "Worker",
 };
 

@@ -54,8 +54,8 @@ function EditFarm() {
         .catch((err) => console.log(err));
       createAPIEndpoint(ENDPOINTS.farm)
         .put(id, {
-          farmId: id,
-          farmName: values.name,
+          id: id,
+          name: values.name,
           latitude: values.latitude,
           longitude: values.longitude,
           image: values.image,

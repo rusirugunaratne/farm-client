@@ -40,7 +40,7 @@ function AddFarm() {
         .catch((err) => console.log(err));
       createAPIEndpoint(ENDPOINTS.farm)
         .post({
-          farmName: values.name,
+          name: values.name,
           latitude: values.latitude,
           longitude: values.longitude,
           image: values.image,

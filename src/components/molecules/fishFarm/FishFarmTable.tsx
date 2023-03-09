@@ -50,6 +50,7 @@ export default function FishFarmTable() {
     return createAPIEndpoint(ENDPOINTS.farm)
       .fetch()
       .then((res) => {
+        console.log("inside table");
         console.log(res.data);
         return res.data;
       })
@@ -111,11 +112,11 @@ export default function FishFarmTable() {
             </Box>
           )}
           {rows?.map((row: any) => (
-            <StyledTableRow key={row.farmId}>
+            <StyledTableRow key={row.id}>
               <StyledTableCell align="center">
                 {<Avatar alt={row.name} src={row.image} />}
               </StyledTableCell>
-              <StyledTableCell align="right">{row.farmName}</StyledTableCell>
+              <StyledTableCell align="right">{row.name}</StyledTableCell>
 
               <StyledTableCell align="right">{row.latitude}</StyledTableCell>
               <StyledTableCell align="right">{row.longitude}</StyledTableCell>
@@ -129,8 +130,8 @@ export default function FishFarmTable() {
                     onClick={() => {
                       navigate("editFarm", {
                         state: {
-                          id: row.farmId,
-                          name: row.farmName,
+                          id: row.id,
+                          name: row.name,
                           image: row.image,
                           latitude: row.latitude,
                           longitude: row.longitude,
@@ -151,7 +152,7 @@ export default function FishFarmTable() {
                   <Button
                     onClick={() => {
                       setOpenPopup(true);
-                      setCurrentId(row.farmId);
+                      setCurrentId(row.id);
                     }}
                     variant="contained"
                     color="warning"
