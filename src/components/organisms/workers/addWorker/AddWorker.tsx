@@ -36,7 +36,7 @@ function AddWorker() {
     name: "",
     image: "",
     age: 18,
-    farm: "",
+    farmId: "",
     email: "",
     position: "",
     imageFile: null,
