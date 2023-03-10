@@ -25,7 +25,8 @@ import Box from "@mui/material/Box";
 function EditWorker() {
   const queryClient = useQueryClient();
   const { state } = useLocation();
-  const { id, name, age, email, farm, position, certifiedUntil, image } = state;
+  const { id, name, age, email, farmId, position, certifiedUntil, image } =
+    state;
   const { data: farms, isLoading } = useQuery(["addWorker"], () => {
     return createAPIEndpoint(ENDPOINTS.farm)
       .fetch()
@@ -42,19 +43,28 @@ function EditWorker() {
     name: name,
     image: image,
     age: age,
-    farm: farm,
+    farmId: farmId,
     email: email,
     position: position,
     imageFile: null,
     certifiedUntil: certifiedUntil,
   });
 
+  const getFarmName = (id: number) => {
+    console.log(id, "Yes");
+    return farms?.find((farm: any) => farm.id === id).name;
+  };
+
+  const getFarmId = (farmName: string) => {
+    console.log(farmName, ": farm Name");
+    return farms?.find((farm: any) => farm.name === farmName).id;
+  };
+
   const { values, setValues, errors, setErrors, handleInputChange } =
     useForm(getFreshModel);
 
-  const handleAddFarm = () => {
+  const handleEditWorker = () => {
     if (validate()) {
-      console.log("values", values);
       if (values.image !== "") {
         const formData = new FormData();
         formData.append("file", values.imageFile);
@@ -63,13 +73,12 @@ function EditWorker() {
           .then((res) => console.log(res))
           .catch((err) => console.log(err));
       }
-
       createAPIEndpoint(ENDPOINTS.worker)
         .put(id, {
           id: id,
           name: values.name,
           age: values.age,
-          farm: values.farm,
+          farmId: values.farmId,
           email: values.email,
           position: values.position,
           certifiedUntil: values.certifiedUntil,
@@ -168,15 +177,15 @@ function EditWorker() {
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
-              value={values.farm}
+              value={getFarmName(values.farmId)}
               label="farm"
               name="farm"
               defaultValue={values.farm}
               onChange={handleInputChange}
             >
               {farms?.map((farm: any) => (
-                <MenuItem key={farm.farmId} value={farm.farmName}>
-                  {farm.farmName}
+                <MenuItem key={farm.id} value={farm.name}>
+                  {farm.name}
                 </MenuItem>
               ))}
             </Select>
@@ -243,7 +252,7 @@ function EditWorker() {
           )}
         </CardContent>
         <CardActions>
-          <Button onClick={handleAddFarm} color="primary" size="small">
+          <Button onClick={handleEditWorker} color="primary" size="small">
             Edit
           </Button>
           <Button

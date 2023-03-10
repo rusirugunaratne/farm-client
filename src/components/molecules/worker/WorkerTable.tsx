@@ -152,7 +152,7 @@ export default function WorkerTable() {
                           name: row.name,
                           age: row.age,
                           email: row.email,
-                          farm: row.farm,
+                          farmId: row.farmId,
                           position: row.position,
                           certifiedUntil: row.certifiedUntil,
                           image: row.image,
