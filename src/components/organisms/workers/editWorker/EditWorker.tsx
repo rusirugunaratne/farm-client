@@ -182,7 +182,7 @@ function EditWorker() {
               value={values.farmName}
               label="farmName"
               name="farmName"
-              defaultValue={getFarmName(farmId)}
+              defaultValue={values.farmName}
               onChange={handleInputChange}
             >
               {farms?.map((farm: any) => (
