@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 import { createAPIEndpoint, ENDPOINTS } from "../api";
 
 export default function useStore() {
@@ -28,8 +29,16 @@ export default function useStore() {
         image: values.image,
         hasBarge: values.hasBarge === "on" ? true : false,
       })
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+      .then((res) => {
+        toast.success("Farm Updated Successfully !", {
+          position: toast.POSITION.BOTTOM_LEFT,
+        });
+      })
+      .catch((err) => {
+        toast.error(err, {
+          position: toast.POSITION.BOTTOM_LEFT,
+        });
+      });
   };
 
   const createFarm = (values: any) => {
@@ -41,18 +50,32 @@ export default function useStore() {
         image: values.image,
         hasBarge: values.hasBarge === "on" ? true : false,
       })
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+      .then((res) => {
+        toast.success("Farm Created Successfully !", {
+          position: toast.POSITION.BOTTOM_LEFT,
+        });
+      })
+      .catch((err) => {
+        toast.error(err, {
+          position: toast.POSITION.BOTTOM_LEFT,
+        });
+      });
   };
 
   const deleteFarm = (id: number) => {
     createAPIEndpoint(ENDPOINTS.farm)
       .delete(id)
       .then((res) => {
-        console.log(res);
+        toast.success("Farm Deleted Successfully !", {
+          position: toast.POSITION.BOTTOM_LEFT,
+        });
         farmsRefetch();
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        toast.error(err, {
+          position: toast.POSITION.BOTTOM_LEFT,
+        });
+      });
   };
 
   const getFarmName = (id: number) => {
@@ -77,7 +100,9 @@ export default function useStore() {
         return res.data;
       })
       .catch((err) => {
-        console.log(err);
+        toast.error(err, {
+          position: toast.POSITION.BOTTOM_LEFT,
+        });
       });
   });
 
@@ -92,15 +117,32 @@ export default function useStore() {
         certifiedUntil: values.certifiedUntil,
         image: values.image,
       })
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+      .then((res) => {
+        toast.success("Worker Added Successfuly !", {
+          position: toast.POSITION.BOTTOM_LEFT,
+        });
+      })
+      .catch((err) => {
+        toast.error(err, {
+          position: toast.POSITION.BOTTOM_LEFT,
+        });
+      });
   };
 
   const deleteWorker = (id: number) => {
     createAPIEndpoint(ENDPOINTS.worker)
       .delete(id)
-      .then((res) => workersRefetch())
-      .catch((err) => console.log(err));
+      .then((res) => {
+        toast.success("Worker Deleted Successfuly !", {
+          position: toast.POSITION.BOTTOM_LEFT,
+        });
+        workersRefetch();
+      })
+      .catch((err) => {
+        toast.error(err, {
+          position: toast.POSITION.BOTTOM_LEFT,
+        });
+      });
   };
 
   const updateWorker = (id: number, values: any) => {
@@ -115,8 +157,16 @@ export default function useStore() {
         certifiedUntil: values.certifiedUntil,
         image: values.image,
       })
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+      .then((res) => {
+        toast.success("Worker Updated Successfuly !", {
+          position: toast.POSITION.BOTTOM_LEFT,
+        });
+      })
+      .catch((err) => {
+        toast.error(err, {
+          position: toast.POSITION.BOTTOM_LEFT,
+        });
+      });
   };
 
   //   file operations
