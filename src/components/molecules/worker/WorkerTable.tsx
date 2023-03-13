@@ -50,7 +50,7 @@ export default function WorkerTable() {
     workers,
     workersLoading,
     workersRefetch,
-    handleWorkerDelete,
+    deleteWorker,
     farms,
     farmsLoading,
     getFarmName,
@@ -160,7 +160,7 @@ export default function WorkerTable() {
       {openPopup && (
         <DeleteFarmPopup
           open={openPopup}
-          onDelete={() => handleWorkerDelete(currentId)}
+          onDelete={() => deleteWorker(currentId)}
           id={currentId}
           setOpen={() => setOpenPopup(false)}
         />

@@ -43,7 +43,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 export default function FishFarmTable() {
-  const { farms, farmsLoading, farmsRefetch, handleFarmDelete } = useStore();
+  const { farms, farmsLoading, farmsRefetch, deleteFarm } = useStore();
 
   const location = useLocation();
 
@@ -145,7 +145,7 @@ export default function FishFarmTable() {
       {openPopup && (
         <DeleteFarmPopup
           open={openPopup}
-          onDelete={() => handleFarmDelete(currentId)}
+          onDelete={() => deleteFarm(currentId)}
           id={currentId}
           setOpen={() => setOpenPopup(false)}
         />

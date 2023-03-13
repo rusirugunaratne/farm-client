@@ -18,18 +18,10 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import { z } from "zod";
 import { useQuery } from "@tanstack/react-query";
+import useStore from "../../../../hooks/UseStore";
 
 function AddWorker() {
-  const { data: farms } = useQuery(["addWorker"], () => {
-    return createAPIEndpoint(ENDPOINTS.farm)
-      .fetch()
-      .then((res) => {
-        return res.data;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  });
+  const { farms, uploadFile, createWorker } = useStore();
 
   console.log(farms, "farms");
 
@@ -46,44 +38,17 @@ function AddWorker() {
     certifiedUntil: "2023-01-01",
   });
 
-  const getFarmName = (id: number) => {
-    console.log(id, "Yes");
-    return farms?.find((farm: any) => farm.id === id).name;
-  };
-
-  const getFarmId = (farmName: string) => {
-    console.log(farmName, ": farm Name");
-    return farms?.find((farm: any) => farm.name === farmName).id;
-  };
-
   const { values, setValues, errors, setErrors, handleInputChange } =
     useForm(getFreshModel);
 
   const handleAddFarm = () => {
-    console.log(values);
     if (validate()) {
-      console.log("values", values);
       if (values.image !== "") {
         const formData = new FormData();
         formData.append("file", values.imageFile);
-        createAPIEndpoint(ENDPOINTS.fileUpload)
-          .post(formData)
-          .then((res) => console.log(res))
-          .catch((err) => console.log(err));
+        uploadFile(formData);
       }
-
-      createAPIEndpoint(ENDPOINTS.worker)
-        .post({
-          name: values.name,
-          age: values.age,
-          farmId: getFarmId(values.farmName),
-          email: values.email,
-          position: values.position,
-          certifiedUntil: values.certifiedUntil,
-          image: values.image,
-        })
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err));
+      createWorker(values);
       navigate("/workers");
     }
   };

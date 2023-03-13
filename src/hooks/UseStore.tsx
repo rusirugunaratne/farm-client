@@ -1,9 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { createAPIEndpoint, ENDPOINTS } from "../api";
 
-export {};
-
 export default function useStore() {
+  // farm operations
   const {
     data: farms,
     isLoading: farmsLoading,
@@ -12,8 +11,6 @@ export default function useStore() {
     return createAPIEndpoint(ENDPOINTS.farm)
       .fetch()
       .then((res) => {
-        console.log("inside table");
-        console.log(res.data);
         return res.data;
       })
       .catch((err) => {
@@ -21,7 +18,34 @@ export default function useStore() {
       });
   });
 
-  const handleFarmDelete = (id: number) => {
+  const updateFarm = (id: number, values: any) => {
+    createAPIEndpoint(ENDPOINTS.farm)
+      .put(id, {
+        id: id,
+        name: values.name,
+        latitude: values.latitude,
+        longitude: values.longitude,
+        image: values.image,
+        hasBarge: values.hasBarge === "on" ? true : false,
+      })
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  };
+
+  const createFarm = (values: any) => {
+    createAPIEndpoint(ENDPOINTS.farm)
+      .post({
+        name: values.name,
+        latitude: values.latitude,
+        longitude: values.longitude,
+        image: values.image,
+        hasBarge: values.hasBarge === "on" ? true : false,
+      })
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  };
+
+  const deleteFarm = (id: number) => {
     createAPIEndpoint(ENDPOINTS.farm)
       .delete(id)
       .then((res) => {
@@ -41,6 +65,7 @@ export default function useStore() {
     return farms?.find((farm: any) => farm.name === farmName).id;
   };
 
+  //   worker operations
   const {
     data: workers,
     isLoading: workersLoading,
@@ -56,10 +81,49 @@ export default function useStore() {
       });
   });
 
-  const handleWorkerDelete = (id: number) => {
+  const createWorker = (values: any) => {
+    createAPIEndpoint(ENDPOINTS.worker)
+      .post({
+        name: values.name,
+        age: values.age,
+        farmId: getFarmId(values.farmName),
+        email: values.email,
+        position: values.position,
+        certifiedUntil: values.certifiedUntil,
+        image: values.image,
+      })
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  };
+
+  const deleteWorker = (id: number) => {
     createAPIEndpoint(ENDPOINTS.worker)
       .delete(id)
       .then((res) => workersRefetch())
+      .catch((err) => console.log(err));
+  };
+
+  const updateWorker = (id: number, values: any) => {
+    createAPIEndpoint(ENDPOINTS.worker)
+      .put(id, {
+        id: id,
+        name: values.name,
+        age: values.age,
+        farmId: getFarmId(values.farmName),
+        email: values.email,
+        position: values.position,
+        certifiedUntil: values.certifiedUntil,
+        image: values.image,
+      })
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  };
+
+  //   file operations
+  const uploadFile = (formData: FormData) => {
+    createAPIEndpoint(ENDPOINTS.fileUpload)
+      .post(formData)
+      .then((res) => console.log(res))
       .catch((err) => console.log(err));
   };
 
@@ -69,10 +133,15 @@ export default function useStore() {
     farmsRefetch,
     getFarmName,
     getFarmId,
-    handleFarmDelete,
+    updateFarm,
+    createFarm,
+    deleteFarm,
     workers,
     workersLoading,
     workersRefetch,
-    handleWorkerDelete,
+    createWorker,
+    deleteWorker,
+    updateWorker,
+    uploadFile,
   };
 }

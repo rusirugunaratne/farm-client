@@ -29,7 +29,14 @@ function EditWorker() {
   const { id, name, age, email, farmId, position, certifiedUntil, image } =
     state;
 
-  const { farms, farmsLoading, getFarmId, getFarmName } = useStore();
+  const {
+    farms,
+    farmsLoading,
+    getFarmId,
+    getFarmName,
+    updateWorker,
+    uploadFile,
+  } = useStore();
 
   const navigate = useNavigate();
   const getFreshModel = () => ({
@@ -52,25 +59,9 @@ function EditWorker() {
       if (values.image !== "") {
         const formData = new FormData();
         formData.append("file", values.imageFile);
-        createAPIEndpoint(ENDPOINTS.fileUpload)
-          .post(formData)
-          .then((res) => console.log(res))
-          .catch((err) => console.log(err));
+        uploadFile(formData);
       }
-      console.log(values.farm, "farm");
-      createAPIEndpoint(ENDPOINTS.worker)
-        .put(id, {
-          id: id,
-          name: values.name,
-          age: values.age,
-          farmId: getFarmId(values.farmName),
-          email: values.email,
-          position: values.position,
-          certifiedUntil: values.certifiedUntil,
-          image: values.image,
-        })
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err));
+      updateWorker(id, values);
       navigate("/workers");
     }
   };
