@@ -20,6 +20,7 @@ import DeleteFarmPopup from "../popup/DeleteFarmPopup";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import { useQuery } from "@tanstack/react-query";
+import useStore from "../../../hooks/UseStore";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -42,41 +43,16 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 export default function FishFarmTable() {
-  const {
-    data: rows,
-    isLoading,
-    refetch,
-  } = useQuery(["farm"], () => {
-    return createAPIEndpoint(ENDPOINTS.farm)
-      .fetch()
-      .then((res) => {
-        console.log("inside table");
-        console.log(res.data);
-        return res.data;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  });
+  const { farms, farmsLoading, farmsRefetch, deleteFarm } = useStore();
 
   const location = useLocation();
 
   useEffect(() => {
-    refetch();
+    farmsRefetch();
   }, [location.key]);
 
   const [openPopup, setOpenPopup] = useState(false);
   const [currentId, setCurrentId] = useState(1);
-
-  const handleDelete = (id: number) => {
-    createAPIEndpoint(ENDPOINTS.farm)
-      .delete(id)
-      .then((res) => {
-        console.log(res);
-        refetch();
-      })
-      .catch((err) => console.log(err));
-  };
 
   const navigate = useNavigate();
 
@@ -95,7 +71,7 @@ export default function FishFarmTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {isLoading && (
+          {farmsLoading && (
             <Box
               sx={{
                 display: "flex",
@@ -111,7 +87,7 @@ export default function FishFarmTable() {
               <p>Loading...</p>
             </Box>
           )}
-          {rows?.map((row: any) => (
+          {farms?.map((row: any) => (
             <StyledTableRow key={row.id}>
               <StyledTableCell align="center">
                 {<Avatar alt={row.name} src={row.image} />}
@@ -169,7 +145,7 @@ export default function FishFarmTable() {
       {openPopup && (
         <DeleteFarmPopup
           open={openPopup}
-          onDelete={() => handleDelete(currentId)}
+          onDelete={() => deleteFarm(currentId)}
           id={currentId}
           setOpen={() => setOpenPopup(false)}
         />

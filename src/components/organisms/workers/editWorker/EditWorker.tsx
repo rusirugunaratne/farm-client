@@ -6,7 +6,7 @@ import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
-import useForm from "../../../../hooks/useForms";
+import useForm from "../../../../hooks/UseForms";
 import { useNavigate } from "react-router-dom";
 import "./_index.css";
 import Avatar from "@mui/material/Avatar";
@@ -21,22 +21,22 @@ import { useLocation } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
+import useStore from "../../../../hooks/UseStore";
 
 function EditWorker() {
   const queryClient = useQueryClient();
   const { state } = useLocation();
   const { id, name, age, email, farmId, position, certifiedUntil, image } =
     state;
-  const { data: farms, isLoading } = useQuery(["addWorker"], () => {
-    return createAPIEndpoint(ENDPOINTS.farm)
-      .fetch()
-      .then((res) => {
-        return res.data;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  });
+
+  const {
+    farms,
+    farmsLoading,
+    getFarmId,
+    getFarmName,
+    updateWorker,
+    uploadFile,
+  } = useStore();
 
   const navigate = useNavigate();
   const getFreshModel = () => ({
@@ -51,16 +51,6 @@ function EditWorker() {
     farmName: getFarmName(farmId),
   });
 
-  const getFarmName = (id: number) => {
-    console.log(id, "Yes");
-    return farms?.find((farm: any) => farm.id === id).name;
-  };
-
-  const getFarmId = (farmName: string) => {
-    console.log(farmName, ": farm Name");
-    return farms?.find((farm: any) => farm.name === farmName).id;
-  };
-
   const { values, setValues, errors, setErrors, handleInputChange } =
     useForm(getFreshModel);
 
@@ -69,25 +59,9 @@ function EditWorker() {
       if (values.image !== "") {
         const formData = new FormData();
         formData.append("file", values.imageFile);
-        createAPIEndpoint(ENDPOINTS.fileUpload)
-          .post(formData)
-          .then((res) => console.log(res))
-          .catch((err) => console.log(err));
+        uploadFile(formData);
       }
-      console.log(values.farm, "farm");
-      createAPIEndpoint(ENDPOINTS.worker)
-        .put(id, {
-          id: id,
-          name: values.name,
-          age: values.age,
-          farmId: getFarmId(values.farmName),
-          email: values.email,
-          position: values.position,
-          certifiedUntil: values.certifiedUntil,
-          image: values.image,
-        })
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err));
+      updateWorker(id, values);
       navigate("/workers");
     }
   };
@@ -115,7 +89,7 @@ function EditWorker() {
     return Object.values(temp).every((x) => x === "");
   };
 
-  if (isLoading) {
+  if (farmsLoading) {
     return (
       <Box
         sx={{

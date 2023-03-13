@@ -8,18 +8,20 @@ import TextField from "@mui/material/TextField";
 import Switch from "@mui/material/Switch";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
-import useForm from "../../../../hooks/useForms";
+import useForm from "../../../../hooks/UseForms";
 import { useNavigate } from "react-router-dom";
 import "./_index.css";
 import { useLocation } from "react-router-dom";
 import { createAPIEndpoint, ENDPOINTS } from "../../../../api";
 import SailingIcon from "@mui/icons-material/Sailing";
 import Avatar from "@mui/material/Avatar";
+import useStore from "../../../../hooks/UseStore";
 
 function EditFarm() {
   const { state } = useLocation();
   const { id, name, latitude, longitude, hasBarge, image } = state;
   const navigate = useNavigate();
+  const { uploadFile, updateFarm } = useStore();
 
   const getFreshModel = () => ({
     name: name,
@@ -48,21 +50,8 @@ function EditFarm() {
     if (validate()) {
       const formData = new FormData();
       formData.append("file", values.imageFile);
-      createAPIEndpoint(ENDPOINTS.fileUpload)
-        .post(formData)
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err));
-      createAPIEndpoint(ENDPOINTS.farm)
-        .put(id, {
-          id: id,
-          name: values.name,
-          latitude: values.latitude,
-          longitude: values.longitude,
-          image: values.image,
-          hasBarge: values.hasBarge === "on" ? true : false,
-        })
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err));
+      uploadFile(formData);
+      updateFarm(id, values);
       navigate("/farms");
     }
   };
