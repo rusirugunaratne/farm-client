@@ -22,12 +22,14 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import useStore from "../../../../hooks/UseStore";
+import { useState } from "react";
 
 function EditWorker() {
   const queryClient = useQueryClient();
   const { state } = useLocation();
   const { id, name, age, email, farmId, position, certifiedUntil, image } =
     state;
+  const [isImageUploaded, setIsImageUploaded] = useState(false);
 
   const {
     farms,
@@ -56,7 +58,7 @@ function EditWorker() {
 
   const handleEditWorker = () => {
     if (validate()) {
-      if (values.image !== "") {
+      if (values.image !== "" && isImageUploaded) {
         const formData = new FormData();
         formData.append("file", values.imageFile);
         uploadFile(formData);
@@ -75,6 +77,7 @@ function EditWorker() {
         setValues({ ...values, imageFile: imageFile, image: x.target?.result });
       };
       reader.readAsDataURL(imageFile);
+      setIsImageUploaded(true);
     }
   };
 

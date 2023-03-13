@@ -57,7 +57,6 @@ export default function LoginBox() {
   const navigate = useNavigate();
 
   const handleLogin = () => {
-    console.log(validate());
     if (validate()) {
       values.username === "admin" && values.password === "admin"
         ? navigate("/home")

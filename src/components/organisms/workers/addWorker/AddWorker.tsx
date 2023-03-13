@@ -23,8 +23,6 @@ import useStore from "../../../../hooks/UseStore";
 function AddWorker() {
   const { farms, uploadFile, createWorker } = useStore();
 
-  console.log(farms, "farms");
-
   const navigate = useNavigate();
   const getFreshModel = () => ({
     name: "",

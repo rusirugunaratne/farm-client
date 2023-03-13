@@ -16,7 +16,9 @@ export default function useStore() {
         return res.data;
       })
       .catch((err) => {
-        console.log(err);
+        toast.error(err, {
+          position: toast.POSITION.BOTTOM_LEFT,
+        });
       });
   });
 
@@ -83,12 +85,10 @@ export default function useStore() {
   };
 
   const getFarmName = (id: number) => {
-    console.log(id, "Yes");
     return farms?.find((farm: any) => farm.id === id).name;
   };
 
   const getFarmId = (farmName: string) => {
-    console.log(farmName, ": farm Name");
     return farms?.find((farm: any) => farm.name === farmName).id;
   };
 
@@ -180,8 +180,16 @@ export default function useStore() {
   const uploadFile = (formData: FormData) => {
     createAPIEndpoint(ENDPOINTS.fileUpload)
       .post(formData)
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+      .then((res) => {
+        toast.success("File Uploaded Successfuly !", {
+          position: toast.POSITION.BOTTOM_LEFT,
+        });
+      })
+      .catch((err) => {
+        toast.error("File Uploaded Unsuccessful !", {
+          position: toast.POSITION.BOTTOM_LEFT,
+        });
+      });
   };
 
   const isFarmNotEmpty = (farmId: number) => {

@@ -19,7 +19,7 @@ function App() {
     <QueryClientProvider client={client}>
       <ThemeProvider theme={darkTheme}>
         <CssBaseline />
-        <ToastContainer />
+        <ToastContainer autoClose={1000} />
         <Router></Router>
       </ThemeProvider>
     </QueryClientProvider>

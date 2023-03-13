@@ -16,12 +16,14 @@ import { createAPIEndpoint, ENDPOINTS } from "../../../../api";
 import SailingIcon from "@mui/icons-material/Sailing";
 import Avatar from "@mui/material/Avatar";
 import useStore from "../../../../hooks/UseStore";
+import { useState } from "react";
 
 function EditFarm() {
   const { state } = useLocation();
   const { id, name, latitude, longitude, hasBarge, image } = state;
   const navigate = useNavigate();
   const { uploadFile, updateFarm } = useStore();
+  const [isImageUploaded, setIsImageUploaded] = useState(false);
 
   const getFreshModel = () => ({
     name: name,
@@ -43,14 +45,17 @@ function EditFarm() {
         setValues({ ...values, imageFile: imageFile, image: x.target?.result });
       };
       reader.readAsDataURL(imageFile);
+      setIsImageUploaded(true);
     }
   };
 
   const handleAddFarm = () => {
     if (validate()) {
-      const formData = new FormData();
-      formData.append("file", values.imageFile);
-      uploadFile(formData);
+      if (isImageUploaded) {
+        const formData = new FormData();
+        formData.append("file", values.imageFile);
+        uploadFile(formData);
+      }
       updateFarm(id, values);
       navigate("/farms");
     }

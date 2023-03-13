@@ -129,7 +129,6 @@ export default function FishFarmTable() {
                   <Button
                     disabled={isFarmNotEmpty(row.id)}
                     onClick={() => {
-                      console.log(isFarmNotEmpty(row.id));
                       setOpenPopup(true);
                       setCurrentId(row.id);
                     }}
