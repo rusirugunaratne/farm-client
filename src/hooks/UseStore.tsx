@@ -1,8 +1,9 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { createAPIEndpoint, ENDPOINTS } from "../api";
 
 export default function useStore() {
+  const queryClient = useQueryClient();
   // farm operations
   const {
     data: farms,
@@ -30,6 +31,7 @@ export default function useStore() {
         hasBarge: values.hasBarge === "on" ? true : false,
       })
       .then((res) => {
+        queryClient.invalidateQueries(["farm"]);
         toast.success("Farm Updated Successfully !", {
           position: toast.POSITION.BOTTOM_LEFT,
         });
@@ -51,6 +53,7 @@ export default function useStore() {
         hasBarge: values.hasBarge === "on" ? true : false,
       })
       .then((res) => {
+        queryClient.invalidateQueries(["farm"]);
         toast.success("Farm Created Successfully !", {
           position: toast.POSITION.BOTTOM_LEFT,
         });
@@ -66,6 +69,7 @@ export default function useStore() {
     createAPIEndpoint(ENDPOINTS.farm)
       .delete(id)
       .then((res) => {
+        queryClient.invalidateQueries(["farm"]);
         toast.success("Farm Deleted Successfully !", {
           position: toast.POSITION.BOTTOM_LEFT,
         });
@@ -118,6 +122,7 @@ export default function useStore() {
         image: values.image,
       })
       .then((res) => {
+        queryClient.invalidateQueries(["worker"]);
         toast.success("Worker Added Successfuly !", {
           position: toast.POSITION.BOTTOM_LEFT,
         });
@@ -133,6 +138,7 @@ export default function useStore() {
     createAPIEndpoint(ENDPOINTS.worker)
       .delete(id)
       .then((res) => {
+        queryClient.invalidateQueries(["worker"]);
         toast.success("Worker Deleted Successfuly !", {
           position: toast.POSITION.BOTTOM_LEFT,
         });
@@ -158,6 +164,7 @@ export default function useStore() {
         image: values.image,
       })
       .then((res) => {
+        queryClient.invalidateQueries(["worker"]);
         toast.success("Worker Updated Successfuly !", {
           position: toast.POSITION.BOTTOM_LEFT,
         });
@@ -177,6 +184,16 @@ export default function useStore() {
       .catch((err) => console.log(err));
   };
 
+  const isFarmNotEmpty = (farmId: number) => {
+    let status = false;
+    workers.forEach((worker: any) => {
+      if (worker.farmId === farmId) {
+        status = true;
+      }
+    });
+    return status;
+  };
+
   return {
     farms,
     farmsLoading,
@@ -193,5 +210,6 @@ export default function useStore() {
     deleteWorker,
     updateWorker,
     uploadFile,
+    isFarmNotEmpty,
   };
 }

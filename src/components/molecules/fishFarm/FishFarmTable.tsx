@@ -43,7 +43,8 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 export default function FishFarmTable() {
-  const { farms, farmsLoading, farmsRefetch, deleteFarm } = useStore();
+  const { farms, farmsLoading, farmsRefetch, deleteFarm, isFarmNotEmpty } =
+    useStore();
 
   const location = useLocation();
 
@@ -126,7 +127,9 @@ export default function FishFarmTable() {
               <StyledTableCell align="right">
                 {
                   <Button
+                    disabled={isFarmNotEmpty(row.id)}
                     onClick={() => {
+                      console.log(isFarmNotEmpty(row.id));
                       setOpenPopup(true);
                       setCurrentId(row.id);
                     }}
