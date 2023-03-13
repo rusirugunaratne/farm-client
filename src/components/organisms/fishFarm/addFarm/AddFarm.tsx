@@ -33,7 +33,6 @@ function AddFarm() {
   const { createFarm, uploadFile } = useStore();
 
   const handleAddFarm = () => {
-    console.log(values);
     if (validate()) {
       const formData = new FormData();
       formData.append("file", values.imageFile);
