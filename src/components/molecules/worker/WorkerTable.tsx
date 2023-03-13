@@ -18,6 +18,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import DeleteFarmPopup from "../popup/DeleteFarmPopup";
 import { useQuery } from "@tanstack/react-query";
+import useStore from "../../../hooks/UseStore";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -43,53 +44,23 @@ export default function WorkerTable() {
   const [openPopup, setOpenPopup] = useState(false);
   const [currentId, setCurrentId] = useState(1);
 
-  const { data: farms, isLoading: farmsLoading } = useQuery(["farm"], () => {
-    return createAPIEndpoint(ENDPOINTS.farm)
-      .fetch()
-      .then((res) => {
-        console.log("inside table");
-        console.log(res.data);
-        return res.data;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  });
-
-  const getFarm = (id: number) => {
-    console.log(id, "Yes");
-    return farms?.find((farm: any) => farm.id === id).name;
-  };
-
   const navigate = useNavigate();
 
   const {
-    data: rows,
-    isLoading,
-    refetch,
-  } = useQuery(["worker"], () => {
-    return createAPIEndpoint(ENDPOINTS.worker)
-      .fetch()
-      .then((res) => {
-        return res.data;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  });
+    workers,
+    workersLoading,
+    workersRefetch,
+    handleWorkerDelete,
+    farms,
+    farmsLoading,
+    getFarmName,
+  } = useStore();
 
   const location = useLocation();
 
   useEffect(() => {
-    refetch();
+    workersRefetch();
   }, [location.key]);
-
-  const handleDelete = (id: number) => {
-    createAPIEndpoint(ENDPOINTS.worker)
-      .delete(id)
-      .then((res) => refetch())
-      .catch((err) => console.log(err));
-  };
 
   return (
     <TableContainer className="farm-table" component={Paper}>
@@ -108,7 +79,7 @@ export default function WorkerTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {isLoading && farmsLoading && (
+          {workersLoading && farmsLoading && (
             <Box
               sx={{
                 display: "flex",
@@ -124,7 +95,7 @@ export default function WorkerTable() {
               <p>Loading...</p>
             </Box>
           )}
-          {rows?.map((row: any) => (
+          {workers?.map((row: any) => (
             <StyledTableRow key={row.id}>
               <StyledTableCell align="center">
                 {<Avatar alt={row.name} src={row.image} />}
@@ -135,7 +106,7 @@ export default function WorkerTable() {
               <StyledTableCell align="right">{row.email}</StyledTableCell>
 
               <StyledTableCell align="right">
-                {getFarm(row.farmId)}
+                {getFarmName(row.farmId)}
               </StyledTableCell>
               <StyledTableCell align="right">{row.position}</StyledTableCell>
               <StyledTableCell align="right">
@@ -189,7 +160,7 @@ export default function WorkerTable() {
       {openPopup && (
         <DeleteFarmPopup
           open={openPopup}
-          onDelete={() => handleDelete(currentId)}
+          onDelete={() => handleWorkerDelete(currentId)}
           id={currentId}
           setOpen={() => setOpenPopup(false)}
         />

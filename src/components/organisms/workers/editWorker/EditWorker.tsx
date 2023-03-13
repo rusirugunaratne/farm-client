@@ -6,7 +6,7 @@ import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
-import useForm from "../../../../hooks/useForms";
+import useForm from "../../../../hooks/UseForms";
 import { useNavigate } from "react-router-dom";
 import "./_index.css";
 import Avatar from "@mui/material/Avatar";
@@ -21,22 +21,15 @@ import { useLocation } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
+import useStore from "../../../../hooks/UseStore";
 
 function EditWorker() {
   const queryClient = useQueryClient();
   const { state } = useLocation();
   const { id, name, age, email, farmId, position, certifiedUntil, image } =
     state;
-  const { data: farms, isLoading } = useQuery(["addWorker"], () => {
-    return createAPIEndpoint(ENDPOINTS.farm)
-      .fetch()
-      .then((res) => {
-        return res.data;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  });
+
+  const { farms, farmsLoading, getFarmId, getFarmName } = useStore();
 
   const navigate = useNavigate();
   const getFreshModel = () => ({
@@ -50,16 +43,6 @@ function EditWorker() {
     certifiedUntil: certifiedUntil,
     farmName: getFarmName(farmId),
   });
-
-  const getFarmName = (id: number) => {
-    console.log(id, "Yes");
-    return farms?.find((farm: any) => farm.id === id).name;
-  };
-
-  const getFarmId = (farmName: string) => {
-    console.log(farmName, ": farm Name");
-    return farms?.find((farm: any) => farm.name === farmName).id;
-  };
 
   const { values, setValues, errors, setErrors, handleInputChange } =
     useForm(getFreshModel);
@@ -115,7 +98,7 @@ function EditWorker() {
     return Object.values(temp).every((x) => x === "");
   };
 
-  if (isLoading) {
+  if (farmsLoading) {
     return (
       <Box
         sx={{

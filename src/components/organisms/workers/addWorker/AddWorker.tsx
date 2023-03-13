@@ -6,7 +6,7 @@ import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
-import useForm from "../../../../hooks/useForms";
+import useForm from "../../../../hooks/UseForms";
 import { useNavigate } from "react-router-dom";
 import "./_index.css";
 import Avatar from "@mui/material/Avatar";

@@ -8,7 +8,7 @@ import TextField from "@mui/material/TextField";
 import Switch from "@mui/material/Switch";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
-import useForm from "../../../../hooks/useForms";
+import useForm from "../../../../hooks/UseForms";
 import { Link, useNavigate } from "react-router-dom";
 import "./_index.css";
 import Avatar from "@mui/material/Avatar";
