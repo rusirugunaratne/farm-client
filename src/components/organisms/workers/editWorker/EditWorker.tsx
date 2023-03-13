@@ -48,6 +48,7 @@ function EditWorker() {
     position: position,
     imageFile: null,
     certifiedUntil: certifiedUntil,
+    farm: "",
   });
 
   const getFarmName = (id: number) => {
@@ -73,6 +74,7 @@ function EditWorker() {
           .then((res) => console.log(res))
           .catch((err) => console.log(err));
       }
+      console.log(values.farm, "farm");
       createAPIEndpoint(ENDPOINTS.worker)
         .put(id, {
           id: id,
@@ -177,7 +179,7 @@ function EditWorker() {
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
-              value={getFarmName(values.farmId)}
+              value={values.farm}
               label="farm"
               name="farm"
               defaultValue={values.farm}
