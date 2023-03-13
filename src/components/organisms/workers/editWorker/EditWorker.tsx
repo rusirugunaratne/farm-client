@@ -48,7 +48,7 @@ function EditWorker() {
     position: position,
     imageFile: null,
     certifiedUntil: certifiedUntil,
-    farm: "",
+    farmName: getFarmName(farmId),
   });
 
   const getFarmName = (id: number) => {
@@ -80,7 +80,7 @@ function EditWorker() {
           id: id,
           name: values.name,
           age: values.age,
-          farmId: values.farmId,
+          farmId: getFarmId(values.farmName),
           email: values.email,
           position: values.position,
           certifiedUntil: values.certifiedUntil,
@@ -179,10 +179,10 @@ function EditWorker() {
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
-              value={values.farm}
-              label="farm"
-              name="farm"
-              defaultValue={values.farm}
+              value={values.farmName}
+              label="farmName"
+              name="farmName"
+              defaultValue={getFarmName(farmId)}
               onChange={handleInputChange}
             >
               {farms?.map((farm: any) => (
