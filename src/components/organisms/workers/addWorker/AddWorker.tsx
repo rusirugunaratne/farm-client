@@ -31,17 +31,30 @@ function AddWorker() {
       });
   });
 
+  console.log(farms, "farms");
+
   const navigate = useNavigate();
   const getFreshModel = () => ({
     name: "",
     image: "",
     age: 18,
-    farmId: "",
+    farmId: null,
     email: "",
     position: "",
     imageFile: null,
+    farmName: "",
     certifiedUntil: "2023-01-01",
   });
+
+  const getFarmName = (id: number) => {
+    console.log(id, "Yes");
+    return farms?.find((farm: any) => farm.id === id).name;
+  };
+
+  const getFarmId = (farmName: string) => {
+    console.log(farmName, ": farm Name");
+    return farms?.find((farm: any) => farm.name === farmName).id;
+  };
 
   const { values, setValues, errors, setErrors, handleInputChange } =
     useForm(getFreshModel);
@@ -63,7 +76,7 @@ function AddWorker() {
         .post({
           name: values.name,
           age: values.age,
-          farm: values.farm,
+          farmId: getFarmId(values.farmName),
           email: values.email,
           position: values.position,
           certifiedUntil: values.certifiedUntil,
@@ -143,14 +156,14 @@ function AddWorker() {
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
-              value={values.farm}
+              value={values.farmName}
               label="Farm"
-              name="farm"
+              name="farmName"
               onChange={handleInputChange}
             >
               {farms?.map((farm: any) => (
-                <MenuItem key={farm.farmId} value={farm.farmName}>
-                  {farm.farmName}
+                <MenuItem key={farm.id} value={farm.name}>
+                  {farm.name}
                 </MenuItem>
               ))}
             </Select>

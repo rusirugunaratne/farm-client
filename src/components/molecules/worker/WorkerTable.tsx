@@ -43,6 +43,24 @@ export default function WorkerTable() {
   const [openPopup, setOpenPopup] = useState(false);
   const [currentId, setCurrentId] = useState(1);
 
+  const { data: farms, isLoading: farmsLoading } = useQuery(["farm"], () => {
+    return createAPIEndpoint(ENDPOINTS.farm)
+      .fetch()
+      .then((res) => {
+        console.log("inside table");
+        console.log(res.data);
+        return res.data;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
+
+  const getFarm = (id: number) => {
+    console.log(id, "Yes");
+    return farms?.find((farm: any) => farm.id === id).name;
+  };
+
   const navigate = useNavigate();
 
   const {
@@ -90,7 +108,7 @@ export default function WorkerTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {isLoading && (
+          {isLoading && farmsLoading && (
             <Box
               sx={{
                 display: "flex",
@@ -116,7 +134,9 @@ export default function WorkerTable() {
               <StyledTableCell align="right">{row.age}</StyledTableCell>
               <StyledTableCell align="right">{row.email}</StyledTableCell>
 
-              <StyledTableCell align="right">{row.farm}</StyledTableCell>
+              <StyledTableCell align="right">
+                {getFarm(row.farmId)}
+              </StyledTableCell>
               <StyledTableCell align="right">{row.position}</StyledTableCell>
               <StyledTableCell align="right">
                 {row.certifiedUntil}
@@ -132,7 +152,7 @@ export default function WorkerTable() {
                           name: row.name,
                           age: row.age,
                           email: row.email,
-                          farm: row.farm,
+                          farmId: row.farmId,
                           position: row.position,
                           certifiedUntil: row.certifiedUntil,
                           image: row.image,
