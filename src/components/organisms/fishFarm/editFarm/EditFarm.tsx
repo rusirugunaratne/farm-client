@@ -20,6 +20,7 @@ import { useState } from "react";
 
 function EditFarm() {
   const { state } = useLocation();
+  console.log("state ", state);
   const { id, name, latitude, longitude, hasBarge, image } = state;
   const navigate = useNavigate();
   const { uploadFile, updateFarm } = useStore();
@@ -50,6 +51,7 @@ function EditFarm() {
   };
 
   const handleAddFarm = () => {
+    console.log("before feeding", values);
     if (validate()) {
       if (isImageUploaded) {
         const formData = new FormData();
@@ -123,12 +125,26 @@ function EditFarm() {
             })}
             onChange={handleInputChange}
           />
-          <FormControlLabel
+          {/* <FormControlLabel
             name="hasBarge"
             value={values.hasBarge}
-            control={<Switch {...(hasBarge && { defaultChecked: true })} />}
+            defaultChecked={values.hasBarge === "on" ? true : false}
+            control={<Switch {...hasBarge} />}
             label="Has a Barge"
             onChange={handleInputChange}
+          /> */}
+          <FormControlLabel
+            control={
+              <Switch
+                defaultChecked={values.hasBarge === "on" ? true : false}
+                onChange={(e) => {
+                  values.hasBarge = e.target.checked;
+                }}
+                name="hasBarge"
+                value={values.hasBarge}
+              />
+            }
+            label="Has a Barge"
           />
           <div className="image">
             <Avatar variant="rounded" alt={values.name} src={values.image}>
