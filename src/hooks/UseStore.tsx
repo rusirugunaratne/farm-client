@@ -24,6 +24,9 @@ export default function useStore() {
 
   const updateFarm = (id: number, values: any) => {
     console.log(values);
+    if (typeof values.hasBarge === "string") {
+      values.hasBarge = values.hasBarge === "on" ? true : false;
+    }
     createAPIEndpoint(ENDPOINTS.farm)
       .put(id, {
         id: id,
