@@ -21,6 +21,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import { useQuery } from "@tanstack/react-query";
 import useStore from "../../../hooks/UseStore";
+import Tooltip from "@mui/material/Tooltip";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -126,18 +127,29 @@ export default function FishFarmTable() {
               </StyledTableCell>
               <StyledTableCell align="right">
                 {
-                  <Button
-                    disabled={isFarmNotEmpty(row.id)}
-                    onClick={() => {
-                      setOpenPopup(true);
-                      setCurrentId(row.id);
-                    }}
-                    variant="contained"
-                    color="warning"
-                    startIcon={<DeleteSweepIcon />}
+                  <Tooltip
+                    title={
+                      isFarmNotEmpty(row.id)
+                        ? "Cannot delete a farm containing workers"
+                        : ""
+                    }
+                    followCursor
                   >
-                    Delete
-                  </Button>
+                    <span>
+                      <Button
+                        disabled={isFarmNotEmpty(row.id)}
+                        onClick={() => {
+                          setOpenPopup(true);
+                          setCurrentId(row.id);
+                        }}
+                        variant="contained"
+                        color="warning"
+                        startIcon={<DeleteSweepIcon />}
+                      >
+                        Delete
+                      </Button>
+                    </span>
+                  </Tooltip>
                 }
               </StyledTableCell>
             </StyledTableRow>

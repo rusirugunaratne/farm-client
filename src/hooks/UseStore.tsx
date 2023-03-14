@@ -23,6 +23,10 @@ export default function useStore() {
   });
 
   const updateFarm = (id: number, values: any) => {
+    console.log(values);
+    if (typeof values.hasBarge === "string") {
+      values.hasBarge = values.hasBarge === "on" ? true : false;
+    }
     createAPIEndpoint(ENDPOINTS.farm)
       .put(id, {
         id: id,
@@ -30,7 +34,7 @@ export default function useStore() {
         latitude: values.latitude,
         longitude: values.longitude,
         image: values.image,
-        hasBarge: values.hasBarge === "on" ? true : false,
+        hasBarge: values.hasBarge,
       })
       .then((res) => {
         queryClient.invalidateQueries(["farm"]);

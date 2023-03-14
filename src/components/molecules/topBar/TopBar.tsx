@@ -61,7 +61,7 @@ export default function TopBar() {
             <div style={{ display: "flex", gap: "10px" }}>
               <Link className="link" to="/home">
                 <Button
-                  variant="contained"
+                  variant={path.includes("home") ? "contained" : "outlined"}
                   color="secondary"
                   startIcon={<DirectionsBoatIcon />}
                 >
@@ -70,7 +70,7 @@ export default function TopBar() {
               </Link>
               <Link className="link" to="/farms">
                 <Button
-                  variant="outlined"
+                  variant={path.includes("farms") ? "contained" : "outlined"}
                   color="primary"
                   startIcon={<PhishingIcon />}
                 >
@@ -79,7 +79,7 @@ export default function TopBar() {
               </Link>
               <Link className="link" to="/workers">
                 <Button
-                  variant="outlined"
+                  variant={path.includes("workers") ? "contained" : "outlined"}
                   color="primary"
                   startIcon={<PeopleAltIcon />}
                 >
